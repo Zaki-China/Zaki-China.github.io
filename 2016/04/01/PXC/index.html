@@ -55,16 +55,16 @@ db_02
 
 
 192.168.80">
-<meta property="og:image" content="http://yoursite.com/./1.1.png">
-<meta property="og:image" content="http://yoursite.com/./1.2.png">
-<meta property="og:image" content="http://yoursite.com/./1.3.png">
-<meta property="og:image" content="http://yoursite.com/./2.1.png">
-<meta property="og:image" content="http://yoursite.com/./2.2.png">
-<meta property="og:image" content="http://yoursite.com/./2.3.png">
-<meta property="og:image" content="http://yoursite.com/./下载.png">
-<meta property="og:image" content="http://yoursite.com/./下载 1.png">
-<meta property="og:image" content="http://yoursite.com/./下载 2.png">
-<meta property="og:updated_time" content="2016-04-01T13:12:52.180Z">
+<meta property="og:image" content="http://yoursite.com/../images/1.1.png">
+<meta property="og:image" content="http://yoursite.com/../images/1.2.png">
+<meta property="og:image" content="http://yoursite.com/../images/1.3.png">
+<meta property="og:image" content="http://yoursite.com/../images/2.1.png">
+<meta property="og:image" content="http://yoursite.com/../images/2.2.png">
+<meta property="og:image" content="http://yoursite.com/../images/2.3.png">
+<meta property="og:image" content="http://yoursite.com/../images/下载.png">
+<meta property="og:image" content="http://yoursite.com/../images/下载 1.png">
+<meta property="og:image" content="http://yoursite.com/../images/下载 2.png">
+<meta property="og:updated_time" content="2016-04-01T13:43:55.308Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PXC（Percona XtraDB Cluster）集群安装，以及关于mysql主从复制的概述与分类">
 <meta name="twitter:description" content="操作系统 ：Centos 6.4 64位 Basic Server安装 软件版本 ：5.6.28-76.1-56 Percona XtraDB Cluster (GPL)
@@ -90,7 +90,7 @@ db_02
 
 
 192.168.80">
-<meta name="twitter:image" content="http://yoursite.com/./1.1.png">
+<meta name="twitter:image" content="http://yoursite.com/../images/1.1.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -256,14 +256,14 @@ wsrep_node_name=db_02
 </code></pre><p>至此，集群安装结束。</p>
 <h4 id="模拟PXC故障场景"><a href="#模拟PXC故障场景" class="headerlink" title="模拟PXC故障场景"></a>模拟PXC故障场景</h4><p><strong>测试条件：</strong>数据持续写入中<br>1，其中一个节点挂掉，恢复后加入集群</p>
 <p>结果：成功加入，且没有数据丢失。</p>
-<p>主节点<br> <img src="./1.1.png" alt="Alt text"></p>
-<p>挂掉的节点<br> <img src="./1.2.png" alt="Alt text"></p>
-<p>其他节点<br> <img src="./1.3.png" alt="Alt text"></p>
+<p>主节点<br> <img src="../images/1.1.png" alt="Alt text"></p>
+<p>挂掉的节点<br> <img src="../images/1.2.png" alt="Alt text"></p>
+<p>其他节点<br> <img src="../images/1.3.png" alt="Alt text"></p>
 <p>2，其中一个节点data目录被删除后，加入集群</p>
 <p>结果：加入成功，所有节点数据一致。</p>
-<p>主节点<br> <img src="./2.1.png" alt="Alt text"></p>
-<p>目录被删除的节点<br> <img src="./2.2.png" alt="Alt text"></p>
-<p>其他节点<br> <img src="./2.3.png" alt="Alt text"></p>
+<p>主节点<br> <img src="../images/2.1.png" alt="Alt text"></p>
+<p>目录被删除的节点<br> <img src="../images/2.2.png" alt="Alt text"></p>
+<p>其他节点<br> <img src="../images/2.3.png" alt="Alt text"></p>
 <p>操作过程中通过查看日志发现：<br>4567这个端口是个管理端口，主要是用来加入和删除故障节点；<br>4444这个端口是用在加入集群后，通过全量（SST）的方式去同步所有节点的数据时用到的。</p>
 <h4 id="关于mysql主从复制的概述与分类"><a href="#关于mysql主从复制的概述与分类" class="headerlink" title="关于mysql主从复制的概述与分类"></a>关于mysql主从复制的概述与分类</h4><blockquote>
 <p>—— from <a href="http://www.cnblogs.com/abobo/p/4239220.html" target="_blank" rel="external">风之岚翔</a></p>
@@ -294,7 +294,7 @@ wsrep_node_name=db_02
 <p>从库可以用作故障转移。(master挂了，vip切换到slave端)</p>
 <p>用从库做备份，或者特殊统计。（一条大sql跑一下需要很久，可以单独找个slave单独来跑）</p>
 <p>用于主库升级.（M端5.5，S端5.6，S端转换成M，将原M端升级成5.6然后挂载到5.6的M端）</p>
-<p><strong>5、master和slave的工作原理：</strong><br>如图1：<br><img src="./下载.png" alt="Alt text"><br>master更新数据，写binlog；</p>
+<p><strong>5、master和slave的工作原理：</strong><br>如图1：<br><img src="../images/下载.png" alt="Alt text"><br>master更新数据，写binlog；</p>
 <p>slave在master端注册一个i/o thread进程，截取binlog日志的变更。</p>
 <p>i/o thread接入日志变更之后写入到本地的relay log里。</p>
 <p>然后通过sql thread到relay log里进行解析复制到slave端。</p>
@@ -316,7 +316,7 @@ wsrep_node_name=db_02
 <p>优点：保证主从数据一致性。</p>
 <p>缺点：更新、插入、删除的速度要比传统的异步复制稍慢一些，因为多了一个ACK的步骤。</p>
 <p>　　  尤其是在网络受到波动的情况下，如丢包、ping延时，半同步复制和异步复制就会切来切去，也会导致主库的更新、插入、删除操作受到影响。</p>
-<p><strong>4、原理图：</strong><br><img src="./下载 1.png" alt="Alt text"><br><img src="./下载 2.png" alt="Alt text"></p>
+<p><strong>4、原理图：</strong><br><img src="../images/下载 1.png" alt="Alt text"><br><img src="../images/下载 2.png" alt="Alt text"></p>
 <p>（三）、完全同步复制：</p>
 <p>由于半同步的这种弊端，在生产环境里一般用到的很少，但是为了保证节点之间的数据一致性。可以采用完全同步的方式—–PXC架构。</p>
 <p><strong>1、概念：</strong></p>
@@ -339,7 +339,7 @@ wsrep_node_name=db_02
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/04/01/PXC/" data-id="cimhqrkr10002kgsb2f0xjs23" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/04/01/PXC/" data-id="cimhrkbvc0001n0sbpaiobz1t" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PXC-Mysql-集群-M-S/">PXC|Mysql|集群|M/S</a></li></ul>
