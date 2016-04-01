@@ -51,9 +51,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -63,6 +63,42 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-hexo-test" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/01/hexo-test/" class="article-date">
+  <time datetime="2016-04-01T10:45:13.000Z" itemprop="datePublished">2016-04-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/01/hexo-test/">hexo_test</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/01/hexo-test/" data-id="cimhl7i3o000220sbtyv8e9sk" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-HEXO+Github" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -97,7 +133,131 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/31/HEXO+Github/" data-id="cimfq6eky000004sb2kih7s0i" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2016/03/31/HEXO+Github/" data-id="cimhl7i36000020sbss7cpxh6" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-PXC（Percona XtraDB Cluster）集群安装" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/31/PXC（Percona XtraDB Cluster）集群安装/" class="article-date">
+  <time datetime="2016-03-31T03:25:59.304Z" itemprop="datePublished">2016-03-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>title: PXC（Percona XtraDB Cluster）集群安装，以及关于mysql主从复制的概述与分类<br>date: 2016-04-01 18:45:13</p>
+<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><p>(DBA学习)[PXC|Mysql|集群]</p>
+<p> <strong>操作系统</strong> ：Centos 6.4 64位 Basic Server安装<br> <strong>软件版本</strong> ：5.6.28-76.1-56 Percona XtraDB Cluster (GPL)</p>
+<p> <strong>节点信息</strong> ：</p>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>主机名</th>
+<th>Node Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.80.137</td>
+<td>db1.test.com</td>
+<td>db_01</td>
+</tr>
+<tr>
+<td>192.168.80.138</td>
+<td>db2.test.com</td>
+<td>db_02</td>
+</tr>
+<tr>
+<td>192.168.80.136</td>
+<td>db3.test.com</td>
+<td>db_03</td>
+</tr>
+</tbody>
+</table>
+<p>在 DNS 里解析主机名，或者在 host 文件里加入下面的内容：</p>
+<pre><code>192.168.80.136 db3.test.com
+192.168.80.137 db1.test.com
+192.168.80.138 db2.test.com
+</code></pre><p>开放 iptables 端口限制</p>
+<pre><code>#注意只暴露给内网对应的设备
+iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
+iptables -I INPUT -p tcp --dport 4444 -j ACCEPT
+iptables -I INPUT -p tcp --dport 4567 -j ACCEPT
+
+#记得保存
+/etc/init.d/iptables save
+</code></pre><p>关闭 selinux</p>
+<pre><code>setenforce 0
+sed -i &apos;s/SELINUX=.*/SELINUX=disabled/&apos; /etc/selinux/config
+</code></pre><hr>
+<p>[TOC]</p>
+<h4 id="PXC安装过程"><a href="#PXC安装过程" class="headerlink" title="PXC安装过程"></a>PXC安装过程</h4><blockquote>
+<p>Percona XtraDB Cluster 是 MySQL 高可用性和可扩展性的解决方案。Percona Server 是MySQL的改进版本，使用 XtraDB 存储引擎，在功能和性能上较 MySQL 有着很显著的提升，如提升了在高负载情况下的 InnoDB 的性能，Percona XtraDB Cluster 完全兼容 MySQL 和 Percona Server。    —— <a href="http://blog.tanchao.org/2015/12/15/install-pxc/" target="_blank" rel="external">OutMan の Blog</a></p>
+</blockquote>
+<p>在每个Node上执行下面的操作 </p>
+<pre><code>#安装 epel 源
+yum install http://mirrors.yun-idc.com/epel/6/i386/epel-release-6-8.noarch.rpm
+#安装 percona 官方源
+yum install http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+</code></pre><p>（PS：我在这里碰到了安装percona官方源失败的情况<br><strong>解决方法</strong>：查看ll /etc/yum.repos.d/<br><strong>vi /etc/yum.repos.d/epel.repo</strong><br>编辑[epel]下的baseurl前的#号去掉，mirrorlist前添加#号<br>再运行yum makecache）</p>
+<pre><code>#安装5.6版本
+yum install Percona-XtraDB-Cluster-server-56
+#mysql 加入自启动
+chkconfig mysql on
+</code></pre><p>每台机器开启PXC，之后添加SST账户：</p>
+<pre><code>/etc/init.d/mysql start
+
+#创建 sst 用户，不能用下面的弱密码
+CREATE USER &apos;sstuser&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;password&apos;;    
+GRANT RELOAD, LOCK TABLES, REPLICATION CLIENT ON *.* TO &apos;sstuser&apos;@&apos;localhost&apos;;          
+FLUSH PRIVILEGES;
+</code></pre><p>每个节点关闭PXC。编辑第一个节点的PXC设置。</p>
+<pre><code>[mysqld]
+#注意Server-id 应该每个机器不一样
+server-id = 1
+wsrep_provider=/usr/lib64/libgalera_smm.so
+#这里指定到db_01的主机名 db1.test.com
+wsrep_cluster_address=&quot;gcomm://db1.test.com,db2.test.com,db3.test.com&quot;
+wsrep_sst_auth=&quot;sstuser:warren&quot;
+wsrep_provider_options=&quot;gcache.size=2G&quot;
+wsrep_cluster_name=Percona
+#指定SST方式，支持rsync(最快，需要锁表)，mysqldump 和 xtrabackup
+#从 5.5.33-23.7.6 起支持 xtrabackup-v2
+#5.6 默认是 xtrabackup-v2 ,可以不配置这上选项，但不能配置为 xtrabackup
+wsrep_sst_method=xtrabackup-v2
+#节点的名称，每个机器要区别开来
+wsrep_node_name=db_01
+wsrep_slave_threads=4
+binlog_format=ROW
+log_slave_updates
+innodb_locks_unsafe_for_binlog=1
+innodb_autoinc_lock_mode=2
+default_storage_engine=InnoDB
+</code></pre><p>开启第一个节点（如果集群关闭，每次拥有正确信息的节点使用此命令开启集群）</p>
+<pre><code>service mysql bootstrap-pxc
+</code></pre><p>编辑另外两个节点的my.cnf配置文件需要修改的内容：</p>
+<pre><code>server_id=2  
+wsrep_node_name=db_02
+</code></pre><p>将其他两个节点加入到集群中</p>
+<pre><code>service mysql start
+</code></pre><p>至此，集群安装结束。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/31/PXC（Percona XtraDB Cluster）集群安装/" data-id="cimhlgp6q0000nssbqwzusnly" class="article-share-link">Share</a>
       
       
     </footer>
@@ -142,7 +302,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/29/hello-world/" data-id="cimfq6eky000104sbdx20o7t8" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2016/03/29/hello-world/" data-id="cimhl7i3j000120sbiojum7pw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -169,7 +329,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
     </div>
   </div>
 
@@ -177,12 +337,20 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
           <li>
+            <a href="/2016/04/01/hexo-test/">hexo_test</a>
+          </li>
+        
+          <li>
             <a href="/2016/03/31/HEXO+Github/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/03/31/PXC（Percona XtraDB Cluster）集群安装/">(no title)</a>
           </li>
         
           <li>
@@ -202,7 +370,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2016 John Doe<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
