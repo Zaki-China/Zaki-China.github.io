@@ -1,413 +1,404 @@
 <!DOCTYPE html>
-<html>
+<!--[if lte IE 8 ]>
+<html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!--
+***************  *      *     *
+      8          *    *       *
+      8          *  *         *
+      8          **           *
+      8          *  *         *
+      8          *    *       *
+      8          *      *     *
+      8          *        *   ***********    -----Theme By Kieran(http://go.kieran.top)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<!--<![endif]-->
+
 <head>
-  <meta charset="utf-8">
-  
   <title>Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description">
-  
+  <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="Hexo">
+    <meta name="author" content="胡涛">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
+
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
+	
+    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    
+    
+
+    <!-- Custom stylesheet, (add custom styles here, always load last) -->
+    <!-- Load our stylesheet for IE8 -->
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/css/ie8.css" />
+    <![endif]-->
+
+    <!-- Google Webfonts (Monserrat 400/700, Open Sans 400/600) -->
+    <link href='//fonts.useso.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.useso.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+
+    <!-- Load our fonts individually if IE8+, to avoid faux bold & italic rendering -->
+    <!--[if IE]>
+    <link href='http://fonts.useso.com/css?family=Montserrat:400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.useso.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.useso.com/css?family=Open+Sans:400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.useso.com/css?family=Open+Sans:600' rel='stylesheet' type='text/css'>
+    <![endif]-->
+
+    <!-- jQuery | Load our jQuery, with an alternative source fallback to a local version if request is unavailable -->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Load these in the <head> for quicker IE8+ load times -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+
+
+
+
+
+
+
+
+
   
   
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
   
 
+  
+  <style>.col-md-8.col-md-offset-2.opening-statement img{display:none;}</style>
 </head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
+<!--
+<body class="home-template">
+-->
+<body id="index" class="lightnav animsition">
+
+      <!-- ============================ Off-canvas navigation =========================== -->
+
+    <div class="sb-slidebar sb-right sb-style-overlay sb-momentum-scrolling">
+        <div class="sb-close" aria-label="Close Menu" aria-hidden="true">
+            <img src="/img/close.png" alt="Close"/>
+        </div>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu">
+            <li><a href="/" class="animsition-link" title="Home">Home</a></li>
+            <li><a href="/archives" class="animsition-link" title="archive">archives</a></li>
+            <!-- Dropdown Menu -->
+			 
+            <li>
+                <a class="sb-toggle-submenu">Works<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                        <li><a href="/" target="_BLANK" class="animsition-link">AAA</a></li>
+                    
+                        <li><a href="/atom.xml" target="_BLANK" class="animsition-link">BBB</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a class="sb-toggle-submenu">Links<span class="sb-caret"></span></a>
+                <ul class="sb-submenu">
+                    
+                    <li><a href="http://go.kieran.top/" class="animsition-link">Kieran</a></li>
+                    
+                    <li><a href="http://domain.com/" class="animsition-link">Name</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+        <!-- Lists in Slidebars -->
+        <ul class="sb-menu secondary">
+            <li><a href="/about.html" class="animsition-link" title="about">About</a></li>
+            <li><a href="/atom.xml" class="animsition-link" title="rss">RSS</a></li>
+        </ul>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
+    
+    <!-- ============================ END Off-canvas navigation =========================== -->
+
+    <!-- ============================ #sb-site Main Page Wrapper =========================== -->
+
+    <div id="sb-site">
+        <!-- #sb-site - All page content should be contained within this id, except the off-canvas navigation itself -->
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <div id="navigation" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- Nav logo -->
+                    <div class="logo">
+                        <a href="/" title="Logo" class="animsition-link">
+                         <img src="/img/logo.png" alt="Logo" width="35px;"/> 
+                        </a>
+                    </div>
+                    <!-- // Nav logo -->
+                    <!-- Info-bar -->
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="/" class="animsition-link">Hexo</a></li>
+                            <li class="nolink"><span>Always </span>Creative.</li>
+                            
+                            <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
+                            
+                            
+                            <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+                            
+                            
+                            <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+                            
+                            
+                            <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a></li>
+                            
+                            
+                            <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a></li>
+                            
+                            <li class="nolink"><span>Welcome!</span></li>
+                        </ul>
+                    </nav>
+                    <!--// Info-bar -->
+                </div>
+                <!-- // .container -->
+                <div class="learnmore sb-toggle-right">More</div>
+                <button type="button" class="navbar-toggle menu-icon sb-toggle-right" title="More">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar before"></span>
+                <span class="icon-bar main"></span>
+                <span class="icon-bar after"></span>
+                </button>
+            </div>
+            <!-- // .navbar-inner -->
+        </div>
+
+        <!-- ============================ Header & Logo bar =========================== -->
+
+        <!-- ============================ Hero Image =========================== -->
+
+        <section id="hero" class="scrollme">
+            <div class="container-fluid element-img" style="background: url(/img/bg_img.jpg) no-repeat center center fixed;background-size: cover">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 vertical-align cover boost text-center">
+                        <div class="center-me animateme" data-when="exit" data-from="0" data-to="0.6" data-opacity="0" data-translatey="100">
+                            <div>
+                            	
+                                <h2>YOU'VE MADE A <span>BRAVE</span> DECISION, WELCOME.</h2>
+                                <p></p>
+				    			
+                                <h2></h2>
+                                <p>每一个不曾起舞的日子都是对生命的辜负。</p>
+				    			
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- // .col-md-12 -->
+                </div>
+                <div class="herofade beige-dk"></div>
+            </div>
+        </section>
+
+        <!-- Height spacing helper -->
+        <div class="heightblock"></div>
+        <!-- // End height spacing helper -->
+
+        <!-- ============================ END Hero Image =========================== -->
+      <!-- ============================ Content =========================== -->
+
+<section id="intro">
+    <div class="container">
         
-          <a class="main-nav-link" href="/">Home</a>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
+                    <h3><a href="/2016/04/01/PXC/">PXC（Percona XtraDB Cluster）集群安装，以及关于mysql主从复制的概述与分类</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2016-04-01T10:45:13.000Z" itemprop="datePublished">
+          2016-04-01
+      </time>
+    
+    
+    | 
+    <a href='/tags/PXC-Mysql-集群-M-S/'>PXC|Mysql|集群|M/S</a>
+    
+    
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                         操作系统 ：Centos 6.4 64位 Basic Server安装 软件版本 ：5.6.28-76.1-56 Percona XtraDB Cluster (GPL)
+节点信息 ：
+
+
+
+IP
+主机名
+Node Name
+
+
+
+
+192.168.80.137
+db1.test.com
+db_01
+
+
+192.168.80.138
+db2.test.com
+db_02
+
+
+192.168.80.136
+db3.test.com
+db
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2016/04/01/PXC/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
         
-          <a class="main-nav-link" href="/archives">Archives</a>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 opening-statement">
+                <div class="col-md-4">
+                    <h3><a href="/2016/03/29/hello-world/">Hello World</a></h3>
+                    <span>
+                        <span class="post-meta">
+      <time datetime="2016-03-29T09:40:16.409Z" itemprop="datePublished">
+          2016-03-29
+      </time>
+    
+</span>
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <p>
+                      
+                        Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
+Quick StartCreate a new p
+                      
+                    </p>
+                    
+                    <p class="pull-right readMore">
+                        <a href="/2016/03/29/hello-world/">Read More...</a>
+                    </p>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <hr class="nogutter">
+            </div>
+        </div>
         
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
+        <nav class="pagination" role="pagination">
+          
+          
+        </nav>
     </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main">
-  
-    <article id="post-PXC" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/01/PXC/" class="article-date">
-  <time datetime="2016-04-01T10:45:13.000Z" itemprop="datePublished">2016-04-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/01/PXC/">PXC（Percona XtraDB Cluster）集群安装，以及关于mysql主从复制的概述与分类</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p> <strong>操作系统</strong> ：Centos 6.4 64位 Basic Server安装<br> <strong>软件版本</strong> ：5.6.28-76.1-56 Percona XtraDB Cluster (GPL)</p>
-<p><strong>节点信息</strong> ：</p>
-<table>
-<thead>
-<tr>
-<th>IP</th>
-<th>主机名</th>
-<th>Node Name</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>192.168.80.137</td>
-<td>db1.test.com</td>
-<td>db_01</td>
-</tr>
-<tr>
-<td>192.168.80.138</td>
-<td>db2.test.com</td>
-<td>db_02</td>
-</tr>
-<tr>
-<td>192.168.80.136</td>
-<td>db3.test.com</td>
-<td>db_03</td>
-</tr>
-</tbody>
-</table>
-<p>在 DNS 里解析主机名，或者在 host 文件里加入下面的内容：</p>
-<pre><code>192.168.80.136 db3.test.com
-192.168.80.137 db1.test.com
-192.168.80.138 db2.test.com
-</code></pre><p>开放 iptables 端口限制</p>
-<pre><code>#注意只暴露给内网对应的设备
-iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
-iptables -I INPUT -p tcp --dport 4444 -j ACCEPT
-iptables -I INPUT -p tcp --dport 4567 -j ACCEPT
-
-#记得保存
-/etc/init.d/iptables save
-</code></pre><p>关闭 selinux</p>
-<pre><code>setenforce 0
-sed -i &apos;s/SELINUX=.*/SELINUX=disabled/&apos; /etc/selinux/config
-</code></pre><h4 id="PXC安装过程"><a href="#PXC安装过程" class="headerlink" title="PXC安装过程"></a>PXC安装过程</h4><blockquote>
-<p>Percona XtraDB Cluster 是 MySQL 高可用性和可扩展性的解决方案。Percona Server 是MySQL的改进版本，使用 XtraDB 存储引擎，在功能和性能上较 MySQL 有着很显著的提升，如提升了在高负载情况下的 InnoDB 的性能，Percona XtraDB Cluster 完全兼容 MySQL 和 Percona Server。    —— <a href="http://blog.tanchao.org/2015/12/15/install-pxc/" target="_blank" rel="external">OutMan の Blog</a></p>
-</blockquote>
-<p>在每个Node上执行下面的操作 </p>
-<pre><code>#安装 epel 源
-yum install http://mirrors.yun-idc.com/epel/6/i386/epel-release-6-8.noarch.rpm
-#安装 percona 官方源
-yum install http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
-</code></pre><p>（PS：我在这里碰到了安装percona官方源失败的情况<br><strong>解决方法</strong>：查看ll /etc/yum.repos.d/<br><strong>vi /etc/yum.repos.d/epel.repo</strong><br>编辑[epel]下的baseurl前的#号去掉，mirrorlist前添加#号<br>再运行yum makecache）</p>
-<pre><code>#安装5.6版本
-yum install Percona-XtraDB-Cluster-server-56
-#mysql 加入自启动
-chkconfig mysql on
-</code></pre><p>每台机器开启PXC，之后添加SST账户：</p>
-<pre><code>/etc/init.d/mysql start
-
-#创建 sst 用户，不能用下面的弱密码
-CREATE USER &apos;sstuser&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;password&apos;;    
-GRANT RELOAD, LOCK TABLES, REPLICATION CLIENT ON *.* TO &apos;sstuser&apos;@&apos;localhost&apos;;          
-FLUSH PRIVILEGES;
-</code></pre><p>每个节点关闭PXC。编辑第一个节点的PXC设置。</p>
-<pre><code>[mysqld]
-#注意Server-id 应该每个机器不一样
-server-id = 1
-wsrep_provider=/usr/lib64/libgalera_smm.so
-#这里指定到db_01的主机名 db1.test.com
-wsrep_cluster_address=&quot;gcomm://db1.test.com,db2.test.com,db3.test.com&quot;
-wsrep_sst_auth=&quot;sstuser:warren&quot;
-wsrep_provider_options=&quot;gcache.size=2G&quot;
-wsrep_cluster_name=Percona
-#指定SST方式，支持rsync(最快，需要锁表)，mysqldump 和 xtrabackup
-#从 5.5.33-23.7.6 起支持 xtrabackup-v2
-#5.6 默认是 xtrabackup-v2 ,可以不配置这上选项，但不能配置为 xtrabackup
-wsrep_sst_method=xtrabackup-v2
-#节点的名称，每个机器要区别开来
-wsrep_node_name=db_01
-wsrep_slave_threads=4
-binlog_format=ROW
-log_slave_updates
-innodb_locks_unsafe_for_binlog=1
-innodb_autoinc_lock_mode=2
-default_storage_engine=InnoDB
-</code></pre><p>开启第一个节点（如果集群关闭，每次拥有正确信息的节点使用此命令开启集群）</p>
-<pre><code>service mysql bootstrap-pxc
-</code></pre><p>编辑另外两个节点的my.cnf配置文件需要修改的内容：</p>
-<pre><code>server_id=2  
-wsrep_node_name=db_02
-</code></pre><p>将其他两个节点加入到集群中</p>
-<pre><code>service mysql start
-</code></pre><p>至此，集群安装结束。</p>
-<h4 id="模拟PXC故障场景"><a href="#模拟PXC故障场景" class="headerlink" title="模拟PXC故障场景"></a>模拟PXC故障场景</h4><p><strong>测试条件：</strong>数据持续写入中<br>1，其中一个节点挂掉，恢复后加入集群</p>
-<p>结果：成功加入，且没有数据丢失。</p>
-<p>主节点<br> <img src="/images/1.1.png" alt="Alt text"></p>
-<p>挂掉的节点<br> <img src="/images/1.2.png" alt="Alt text"></p>
-<p>其他节点<br> <img src="/images/1.3.png" alt="Alt text"></p>
-<p>2，其中一个节点data目录被删除后，加入集群</p>
-<p>结果：加入成功，所有节点数据一致。</p>
-<p>主节点<br> <img src="/images/2.1.png" alt="Alt text"></p>
-<p>目录被删除的节点<br> <img src="/images/2.2.png" alt="Alt text"></p>
-<p>其他节点<br> <img src="/images/2.3.png" alt="Alt text"></p>
-<p>操作过程中通过查看日志发现：<br>4567这个端口是个管理端口，主要是用来加入和删除故障节点；<br>4444这个端口是用在加入集群后，通过全量（SST）的方式去同步所有节点的数据时用到的。</p>
-<h4 id="关于mysql主从复制的概述与分类"><a href="#关于mysql主从复制的概述与分类" class="headerlink" title="关于mysql主从复制的概述与分类"></a>关于mysql主从复制的概述与分类</h4><blockquote>
-<p>—— from <a href="http://www.cnblogs.com/abobo/p/4239220.html" target="_blank" rel="external">风之岚翔</a></p>
-</blockquote>
-<p>一、概述：</p>
-<p>   按照MySQL的同步复制特点，大体上可以分为三种类别：</p>
-<p>1、异步复制；</p>
-<p>2、半同步复制；</p>
-<p>3、完全同步的复制；</p>
-<hr>
-<p>（一）、异步复制：</p>
-<p><strong>1、概念</strong></p>
-<p>mysql的异步复制在业界中的叫法有很多，比如：AB复制、主从同步、mysql replication等等。说白了就是master和slave结构。在mysql5.6版本以后又进一步的细分成：传统的复制方法和全新的复制方法。</p>
-<p><strong>2、5.6以后的mysql主从复制的分类：</strong></p>
-<p>2.1、传统复制方法是按照binlog的三种日志格式进行划分的：</p>
-<p>基于语句的复制，即statement模式。</p>
-<p>基于行的复制，即row模式。</p>
-<p>基于混合的复制，即mixed</p>
-<p>2.2、全新的复制方法：基于GTID的复制。</p>
-<p><strong>3、关于master和slave的关系：</strong></p>
-<p>不是主备模式，而是数据镜像。</p>
-<p>特别在GTID环境下，不能在slave上做dml操作。</p>
-<p>slave拿到master上的日志，在slave上以串行的方式进行重放。</p>
-<p>I/O现成是一个（串行），sql线程和DB一样多。</p>
-<p>结构可以分为：一主一从、一主多从、双主多从。</p>
-<p><strong>4、master和slave的作用：</strong></p>
-<p>实现读写分离。</p>
-<p>从库可以用作故障转移。(master挂了，vip切换到slave端)</p>
-<p>用从库做备份，或者特殊统计。（一条大sql跑一下需要很久，可以单独找个slave单独来跑）</p>
-<p>用于主库升级.（M端5.5，S端5.6，S端转换成M，将原M端升级成5.6然后挂载到5.6的M端）</p>
-<p><strong>5、master和slave的工作原理：</strong><br>如图1：<br><img src="/images/下载.png" alt="Alt text"><br>master更新数据，写binlog；</p>
-<p>slave在master端注册一个i/o thread进程，截取binlog日志的变更。</p>
-<p>i/o thread接入日志变更之后写入到本地的relay log里。</p>
-<p>然后通过sql thread到relay log里进行解析复制到slave端。</p>
-<p>在解析过程中会判断是否有主键，如果没有在判断是否有二级索引，如果没有就进行全表扫描。</p>
-<p><strong>6、判断主从同步的地址段参数：</strong><br>判断日志参数：</p>
-<p>master_log_file:</p>
-<p>relay_master_log_file:</p>
-<p>判断地址参数：</p>
-<p>read_master_log_pos:</p>
-<p>exec_master_log_pos:</p>
-<p>（二）、半同步复制：</p>
-<p><strong>1、概念与作用</strong><br>　　在默认情况下，mysql复制功能是异步的，异步复制可以提供最佳性能。当主库把binlog日志发送给从库，这一动作就结束了，并不会验证从库是否接收到，或者接受完毕。这不仅带来了很高的风险，同时也意味着当master或者slave发证故障时，有可能slave端没有接收到主机发送过来的binlog日志，最终导致master/slave的数据不一致，甚至在恢复时造成数据丢失。<br>　　为了解决上述问题，mysql5.5引入了一种半同步复制模式，该模式可以确保slave端接收完master端发送的binlog日志文件写入自己的中继日志relay log里，然后会给master端一个ack。告诉对方已经接收完毕。这时master的线程才返回给当前session告知操作完成。</p>
-<p><strong>2、注意事项：</strong></p>
-<p>a、当出现超时的情况时，源主服务器会暂时切换到异步复制模式，直到至少有一台设置为半同步复制模式的slave端及时收到信息为止。</p>
-<p>b、半同步复制模式必须在主服务器和从服务器端同时启用，否则主服务器默认使用异步复制模式。</p>
-<p>c、slave在接收到二进制日志后会通过i/o_thread给master端一个ack。但是他并不会管relay-log中的sql_thread进程是否执行完。</p>
-<p><strong>3、特点：</strong></p>
-<p>半同步复制的目的是保证主从数据的一致性，等待返回的时间长短决定了数据库的更新速度。</p>
-<p>优点：保证主从数据一致性。</p>
-<p>缺点：更新、插入、删除的速度要比传统的异步复制稍慢一些，因为多了一个ACK的步骤。</p>
-<p>　　  尤其是在网络受到波动的情况下，如丢包、ping延时，半同步复制和异步复制就会切来切去，也会导致主库的更新、插入、删除操作受到影响。</p>
-<p><strong>4、原理图：</strong><br><img src="/images/下载 1.png" alt="Alt text"><br><img src="/images/下载 2.png" alt="Alt text"></p>
-<p>（三）、完全同步复制：</p>
-<p>由于半同步的这种弊端，在生产环境里一般用到的很少，但是为了保证节点之间的数据一致性。可以采用完全同步的方式—–PXC架构。</p>
-<p><strong>1、概念：</strong></p>
-<p>PXC在数据commit的时候需像其他主机成全进行确认，当有多个主机成员返回ACK时才可以commit数据。一般主句数量与返回ACK的数量如下：</p>
-<p>5个节点，有三个节点回复。</p>
-<p>3个节点，有一个节点回复。</p>
-<p><strong>2、特点：</strong></p>
-<p>对于数据库的数据一致性很高的场景。</p>
-<p>PXC解决的是数据一致性的问题，而不是存储结构的问题。</p>
-<p>几个节点可以跑同一个业务结构。同时下面也可以挂在slave端。</p>
-<p>有些类似于oracle的rac功能，实现并发负载。只是没有共享存储，一般oracle转mysql用途比较多些。</p>
-<p><strong>3、工作原理：</strong></p>
-<p>a、在PXC集群中第一个节点会以mysql –wsrep_cluster_address=gcomm://192.168.100.200这种方式启动。其他节点会以/etc/init.d/mysql start的方式启动。</p>
-<p>b、当第二个节点加入PXC集群后，会连接到node1上去请求数据，并查看GTID的节点。如果所有GTID的节点与新加入的节点不一致，就会通过全量（SST）的方式去同步所有节点的数据。此时提供node1数据提供住就被称为donor。</p>
-<p>c、donor角色在同步数据前的时候会做一次SST的备份，此时备份过程中donor节点性能会变得非常差。因此，在跑PXC的服务器不要使用多实例。如果集群是能够在控制范围内的化，可以指定一个donor的主机进行数据同步，当节点传输完后直接删除参数即可。</p>
-<p>参数如下：</p>
-<p>vi /etc/my.cnf</p>
-<p>wsrep_sst_donor=节点名</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/04/01/PXC/" data-id="cimhrtkbw0000f8sb73i8oqwj" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PXC-Mysql-集群-M-S/">PXC|Mysql|集群|M/S</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/29/hello-world/" class="article-date">
-  <time datetime="2016-03-29T09:40:16.409Z" itemprop="datePublished">2016-03-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/29/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/29/hello-world/" data-id="cimhrtkc50001f8sbaxjmzvxd" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 </section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/PXC-Mysql-集群-M-S/">PXC|Mysql|集群|M/S</a></li></ul>
+<section id="statement">
+    <div class="container text-center wow fadeInUp" data-wow-delay="0.5s">
+        <div class="row">
+            <p>虽然还没想好写点什么，但是总觉得这里放句话比较和谐。</p>
+        </div>
     </div>
-  </div>
+</section>
+<!-- ============================ END Content =========================== -->
 
+      
+<!-- ============================ Footer =========================== -->
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/PXC-Mysql-集群-M-S/" style="font-size: 10px;">PXC|Mysql|集群|M/S</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2016/04/01/PXC/">PXC（Percona XtraDB Cluster）集群安装，以及关于mysql主从复制的概述与分类</a>
-          </li>
-        
-          <li>
-            <a href="/2016/03/29/hello-world/">Hello World</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2016 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
+<footer>
+    <div class="container">
+            <div class="copy">
+                <p>
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By 胡涛. All Rights Reserved.
+                </p>
+                <p>Theme By <a href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
+            </div>
+            <div class="social">
+                <ul>
+                    
+                    <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://twitter.com/" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="icon-facebook"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="https://google.com/" title="Google-Plus" target="_blank"><i class="icon-google-plus"></i></a>&nbsp;</li>
+                    
+                    
+                    <li><a href="http://weibo.com/" title="Sina-Weibo" target="_blank"><i class="icon-sina-weibo"></i></a>&nbsp;</li>
+                    
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
 </footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+
+<!-- ============================ END Footer =========================== -->
+      <!-- Load our scripts -->
+        
+<!-- Resizable 'on-demand' full-height hero -->
+<script type="text/javascript">
     
+    var resizeHero = function () {
+        var hero = $(".cover,.heightblock"),
+            window1 = $(window);
+        hero.css({
+            "height": window1.height()
+        });
+    };
+    
+    resizeHero();
+    
+    $(window).resize(function () {
+        resizeHero();
+    });
+</script>
+<script src="/js/plugins.min.js"></script><!-- Bootstrap core and concatenated plugins always load here -->
+<script src="/js/jquery.flexslider-min.js"></script><!-- Flexslider plugin -->
+<script src="/js/scripts.js"></script><!-- Theme scripts -->
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<!-- Initiate flexslider plugin -->
+<script type="text/javascript">
+    $(document).ready(function($) {
+      $('.flexslider').flexslider({
+        animation: "fade",
+        prevText: "",
+        nextText: "",
+        directionNav: true
+      });
+    });
+</script>
 
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
-
-  </div>
 </body>
 </html>
