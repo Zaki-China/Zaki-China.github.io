@@ -17,7 +17,7 @@
 <!--<![endif]-->
 
 <head>
-  <title>PXC（Percona XtraDB Cluster）集群安装，以及关于mysql主从复制的概述与分类 | WARREN&#39;s blog</title>
+  <title>和拖延说拜拜 | WARREN&#39;s blog</title>
   <!-- Meta data -->
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -247,205 +247,57 @@
         <div class="row col-md-offset-2">
             <div class="col-md-8">
     			<span class="post-meta">
-      <time datetime="2016-04-01T10:45:13.000Z" itemprop="datePublished">
-          2016-04-01
+      <time datetime="2016-04-15T05:27:30.000Z" itemprop="datePublished">
+          2016-04-15
       </time>
     
 </span>
-                <h1>PXC（Percona XtraDB Cluster）集群安装，以及关于mysql主从复制的概述与分类</h1>
+                <h1>和拖延说拜拜</h1>
             </div>
         </div>
         <div class="col-md-8 col-md-offset-2">
-      		<p> <strong>操作系统</strong> ：Centos 6.4 64位 Basic Server安装<br> <strong>软件版本</strong> ：5.6.28-76.1-56 Percona XtraDB Cluster (GPL)</p>
-<p><strong>节点信息</strong> ：</p>
-<table>
-<thead>
-<tr>
-<th>IP</th>
-<th>主机名</th>
-<th>Node Name</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>192.168.80.137</td>
-<td>db1.test.com</td>
-<td>db_01</td>
-</tr>
-<tr>
-<td>192.168.80.138</td>
-<td>db2.test.com</td>
-<td>db_02</td>
-</tr>
-<tr>
-<td>192.168.80.136</td>
-<td>db3.test.com</td>
-<td>db_03</td>
-</tr>
-</tbody>
-</table>
-<p>在 DNS 里解析主机名，或者在 host 文件里加入下面的内容：</p>
-<pre><code>192.168.80.136 db3.test.com
-192.168.80.137 db1.test.com
-192.168.80.138 db2.test.com
-</code></pre><p>开放 iptables 端口限制</p>
-<pre><code>#注意只暴露给内网对应的设备
-iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
-iptables -I INPUT -p tcp --dport 4444 -j ACCEPT
-iptables -I INPUT -p tcp --dport 4567 -j ACCEPT
-
-#记得保存
-/etc/init.d/iptables save
-</code></pre><p>关闭 selinux</p>
-<pre><code>setenforce 0
-sed -i &apos;s/SELINUX=.*/SELINUX=disabled/&apos; /etc/selinux/config
-</code></pre><h4 id="PXC安装过程"><a href="#PXC安装过程" class="headerlink" title="PXC安装过程"></a>PXC安装过程</h4><blockquote>
-<p>Percona XtraDB Cluster 是 MySQL 高可用性和可扩展性的解决方案。Percona Server 是MySQL的改进版本，使用 XtraDB 存储引擎，在功能和性能上较 MySQL 有着很显著的提升，如提升了在高负载情况下的 InnoDB 的性能，Percona XtraDB Cluster 完全兼容 MySQL 和 Percona Server。    —— <a href="http://blog.tanchao.org/2015/12/15/install-pxc/" target="_blank" rel="external">OutMan の Blog</a></p>
-</blockquote>
-<p>在每个Node上执行下面的操作 </p>
-<pre><code>#安装 epel 源
-yum install http://mirrors.yun-idc.com/epel/6/i386/epel-release-6-8.noarch.rpm
-#安装 percona 官方源
-yum install http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
-</code></pre><p>（PS：我在这里碰到了安装percona官方源失败的情况<br><strong>解决方法</strong>：查看ll /etc/yum.repos.d/<br><strong>vi /etc/yum.repos.d/epel.repo</strong><br>编辑[epel]下的baseurl前的#号去掉，mirrorlist前添加#号<br>再运行yum makecache）</p>
-<pre><code>#安装5.6版本
-yum install Percona-XtraDB-Cluster-server-56
-#mysql 加入自启动
-chkconfig mysql on
-</code></pre><p>每台机器开启PXC，之后添加SST账户：</p>
-<pre><code>/etc/init.d/mysql start
-
-#创建 sst 用户，不能用下面的弱密码
-CREATE USER &apos;sstuser&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;password&apos;;    
-GRANT RELOAD, LOCK TABLES, REPLICATION CLIENT ON *.* TO &apos;sstuser&apos;@&apos;localhost&apos;;          
-FLUSH PRIVILEGES;
-</code></pre><p>每个节点关闭PXC。编辑第一个节点的PXC设置。</p>
-<pre><code>[mysqld]
-#注意Server-id 应该每个机器不一样
-server-id = 1
-wsrep_provider=/usr/lib64/libgalera_smm.so
-#这里指定到db_01的主机名 db1.test.com
-wsrep_cluster_address=&quot;gcomm://db1.test.com,db2.test.com,db3.test.com&quot;
-wsrep_sst_auth=&quot;sstuser:warren&quot;
-wsrep_provider_options=&quot;gcache.size=2G&quot;
-wsrep_cluster_name=Percona
-#指定SST方式，支持rsync(最快，需要锁表)，mysqldump 和 xtrabackup
-#从 5.5.33-23.7.6 起支持 xtrabackup-v2
-#5.6 默认是 xtrabackup-v2 ,可以不配置这上选项，但不能配置为 xtrabackup
-wsrep_sst_method=xtrabackup-v2
-#节点的名称，每个机器要区别开来
-wsrep_node_name=db_01
-wsrep_slave_threads=4
-binlog_format=ROW
-log_slave_updates
-innodb_locks_unsafe_for_binlog=1
-innodb_autoinc_lock_mode=2
-default_storage_engine=InnoDB
-</code></pre><p>开启第一个节点（如果集群关闭，每次拥有正确信息的节点使用此命令开启集群）</p>
-<pre><code>service mysql bootstrap-pxc
-</code></pre><p>编辑另外两个节点的my.cnf配置文件需要修改的内容：</p>
-<pre><code>server_id=2  
-wsrep_node_name=db_02
-</code></pre><p>将其他两个节点加入到集群中</p>
-<pre><code>service mysql start
-</code></pre><p>至此，集群安装结束。</p>
-<h4 id="模拟PXC故障场景"><a href="#模拟PXC故障场景" class="headerlink" title="模拟PXC故障场景"></a>模拟PXC故障场景</h4><p><strong>测试条件：</strong>数据持续写入中<br>1，其中一个节点挂掉，恢复后加入集群</p>
-<p>结果：成功加入，且没有数据丢失。</p>
-<p>主节点<br> <img src="/images/1.1.png" alt="Alt text"></p>
-<p>挂掉的节点<br> <img src="/images/1.2.png" alt="Alt text"></p>
-<p>其他节点<br> <img src="/images/1.3.png" alt="Alt text"></p>
-<p>2，其中一个节点data目录被删除后，加入集群</p>
-<p>结果：加入成功，所有节点数据一致。</p>
-<p>主节点<br> <img src="/images/2.1.png" alt="Alt text"></p>
-<p>目录被删除的节点<br> <img src="/images/2.2.png" alt="Alt text"></p>
-<p>其他节点<br> <img src="/images/2.3.png" alt="Alt text"></p>
-<p>操作过程中通过查看日志发现：<br>4567这个端口是个管理端口，主要是用来加入和删除故障节点；<br>4444这个端口是用在加入集群后，通过全量（SST）的方式去同步所有节点的数据时用到的。</p>
-<h4 id="关于mysql主从复制的概述与分类"><a href="#关于mysql主从复制的概述与分类" class="headerlink" title="关于mysql主从复制的概述与分类"></a>关于mysql主从复制的概述与分类</h4><blockquote>
-<p>—— from <a href="http://www.cnblogs.com/abobo/p/4239220.html" target="_blank" rel="external">风之岚翔</a></p>
-</blockquote>
-<p>一、概述：</p>
-<p>   按照MySQL的同步复制特点，大体上可以分为三种类别：</p>
-<p>1、异步复制；</p>
-<p>2、半同步复制；</p>
-<p>3、完全同步的复制；</p>
-<hr>
-<p>（一）、异步复制：</p>
-<p><strong>1、概念</strong></p>
-<p>mysql的异步复制在业界中的叫法有很多，比如：AB复制、主从同步、mysql replication等等。说白了就是master和slave结构。在mysql5.6版本以后又进一步的细分成：传统的复制方法和全新的复制方法。</p>
-<p><strong>2、5.6以后的mysql主从复制的分类：</strong></p>
-<p>2.1、传统复制方法是按照binlog的三种日志格式进行划分的：</p>
-<p>基于语句的复制，即statement模式。</p>
-<p>基于行的复制，即row模式。</p>
-<p>基于混合的复制，即mixed</p>
-<p>2.2、全新的复制方法：基于GTID的复制。</p>
-<p><strong>3、关于master和slave的关系：</strong></p>
-<p>不是主备模式，而是数据镜像。</p>
-<p>特别在GTID环境下，不能在slave上做dml操作。</p>
-<p>slave拿到master上的日志，在slave上以串行的方式进行重放。</p>
-<p>I/O现成是一个（串行），sql线程和DB一样多。</p>
-<p>结构可以分为：一主一从、一主多从、双主多从。</p>
-<p><strong>4、master和slave的作用：</strong></p>
-<p>实现读写分离。</p>
-<p>从库可以用作故障转移。(master挂了，vip切换到slave端)</p>
-<p>用从库做备份，或者特殊统计。（一条大sql跑一下需要很久，可以单独找个slave单独来跑）</p>
-<p>用于主库升级.（M端5.5，S端5.6，S端转换成M，将原M端升级成5.6然后挂载到5.6的M端）</p>
-<p><strong>5、master和slave的工作原理：</strong><br>如图1：<br><img src="/images/下载.png" alt="Alt text"><br>master更新数据，写binlog；</p>
-<p>slave在master端注册一个i/o thread进程，截取binlog日志的变更。</p>
-<p>i/o thread接入日志变更之后写入到本地的relay log里。</p>
-<p>然后通过sql thread到relay log里进行解析复制到slave端。</p>
-<p>在解析过程中会判断是否有主键，如果没有在判断是否有二级索引，如果没有就进行全表扫描。</p>
-<p><strong>6、判断主从同步的地址段参数：</strong><br>判断日志参数：</p>
-<p>master_log_file:</p>
-<p>relay_master_log_file:</p>
-<p>判断地址参数：</p>
-<p>read_master_log_pos:</p>
-<p>exec_master_log_pos:</p>
-<p>（二）、半同步复制：</p>
-<p><strong>1、概念与作用</strong><br>　　在默认情况下，mysql复制功能是异步的，异步复制可以提供最佳性能。当主库把binlog日志发送给从库，这一动作就结束了，并不会验证从库是否接收到，或者接受完毕。这不仅带来了很高的风险，同时也意味着当master或者slave发证故障时，有可能slave端没有接收到主机发送过来的binlog日志，最终导致master/slave的数据不一致，甚至在恢复时造成数据丢失。<br>　　为了解决上述问题，mysql5.5引入了一种半同步复制模式，该模式可以确保slave端接收完master端发送的binlog日志文件写入自己的中继日志relay log里，然后会给master端一个ack。告诉对方已经接收完毕。这时master的线程才返回给当前session告知操作完成。</p>
-<p><strong>2、注意事项：</strong></p>
-<p>a、当出现超时的情况时，源主服务器会暂时切换到异步复制模式，直到至少有一台设置为半同步复制模式的slave端及时收到信息为止。</p>
-<p>b、半同步复制模式必须在主服务器和从服务器端同时启用，否则主服务器默认使用异步复制模式。</p>
-<p>c、slave在接收到二进制日志后会通过i/o_thread给master端一个ack。但是他并不会管relay-log中的sql_thread进程是否执行完。</p>
-<p><strong>3、特点：</strong></p>
-<p>半同步复制的目的是保证主从数据的一致性，等待返回的时间长短决定了数据库的更新速度。</p>
-<p>优点：保证主从数据一致性。</p>
-<p>缺点：更新、插入、删除的速度要比传统的异步复制稍慢一些，因为多了一个ACK的步骤。</p>
-<p>　　  尤其是在网络受到波动的情况下，如丢包、ping延时，半同步复制和异步复制就会切来切去，也会导致主库的更新、插入、删除操作受到影响。</p>
-<p><strong>4、原理图：</strong><br><img src="/images/下载 1.png" alt="Alt text"><br><img src="/images/下载 2.png" alt="Alt text"></p>
-<p>（三）、完全同步复制：</p>
-<p>由于半同步的这种弊端，在生产环境里一般用到的很少，但是为了保证节点之间的数据一致性。可以采用完全同步的方式—–PXC架构。</p>
-<p><strong>1、概念：</strong></p>
-<p>PXC在数据commit的时候需像其他主机成全进行确认，当有多个主机成员返回ACK时才可以commit数据。一般主句数量与返回ACK的数量如下：</p>
-<p>5个节点，有三个节点回复。</p>
-<p>3个节点，有一个节点回复。</p>
-<p><strong>2、特点：</strong></p>
-<p>对于数据库的数据一致性很高的场景。</p>
-<p>PXC解决的是数据一致性的问题，而不是存储结构的问题。</p>
-<p>几个节点可以跑同一个业务结构。同时下面也可以挂在slave端。</p>
-<p>有些类似于oracle的rac功能，实现并发负载。只是没有共享存储，一般oracle转mysql用途比较多些。</p>
-<p><strong>3、工作原理：</strong></p>
-<p>a、在PXC集群中第一个节点会以mysql –wsrep_cluster_address=gcomm://192.168.100.200这种方式启动。其他节点会以/etc/init.d/mysql start的方式启动。</p>
-<p>b、当第二个节点加入PXC集群后，会连接到node1上去请求数据，并查看GTID的节点。如果所有GTID的节点与新加入的节点不一致，就会通过全量（SST）的方式去同步所有节点的数据。此时提供node1数据提供住就被称为donor。</p>
-<p>c、donor角色在同步数据前的时候会做一次SST的备份，此时备份过程中donor节点性能会变得非常差。因此，在跑PXC的服务器不要使用多实例。如果集群是能够在控制范围内的化，可以指定一个donor的主机进行数据同步，当节点传输完后直接删除参数即可。</p>
-<p>参数如下：</p>
-<p>vi /etc/my.cnf</p>
-<p>wsrep_sst_donor=节点名</p>
+      		<p>最近因为实习的关系发现自己有一定程度的拖延症，还对自己的个人发展产生了一定的困扰。其实很早以前就知道自己拖延，但是因为对生活没什么特别大的影响，所以就一直忽略这个问题。正好想起之前看到过有对拖延进行分析和如何改进的文章，现在分享出来给大家看看，并以此激励自己不断进步。</p>
+<p>每个人或多或少都会拖延，认识到自己有拖延，而且积极应对的人，都是对生活较为认真的人。<strong>当我意识到自己的拖延问题之后，我开始来正视它</strong>。我认真读了《<strong>拖延心理学</strong>》和《<strong>战胜拖延症</strong>》两本书，做了较多的笔记，也按照书上说的，分析自己、找原因、找解决办法。</p>
+<p>几年过去了，在对付拖延上有了一点进步，自己的一些心得如下</p>
+<p>我很清楚拖延带来的危害；<br>在某件事情上拖延了，我能感知到；<br>发生拖延时，能分析出导致拖延的因素，最后找到解决办法。</p>
+<p>拖延是一种明知道会影响自己做事的效果或自身做事的态度，却依然自愿推迟既定事项的行为。工作的拖延不仅仅给自己带来烦恼，也会给同事带来烦恼，谁也不愿意和经常拖延的人合作。拖延给我们带来了内在和外在的危害，内在危害有焦虑、自我谴责、后悔、自卑、绝望及损害身体健康；外在危害包括失去上级或同事的信任、浪费机会以及绩效不好。</p>
+<p>1997 年，美国 Case Western Reserve University 的两位研究者做了一个心理学测试。开学时，用一般拖延量表测量一个班同学的拖延情况，按照量表情况，把学生分为拖沓者和不拖沓者，然后在学堂上布置了一篇期末论文。在学期初和学期末，学生们还要求报告他们体验到了多少次身体不适的症状。结果不出所料，<strong>拖沓者交论文的时间平均晚于不拖沓者，而且得分也普遍偏低</strong>。在身体不适上，学期初，拖沓者报告的症状更少，但在学期末，他们所报告的症状明显多于不拖沓者，这证明了拖延会带来身体健康的损害。这些拖延带来的危害，也是告知我们正在拖延的信号。</p>
+<p>从 2015 年年底开始，我在做一个个人网站，刚开始劲头很大，每天晚上都能抽出 1 个小时来写代码。但过年了，这个事情就停滞了。停滞确实有(在)原(拖)因(延)，备案正在申请中，等下来再说，而且大过年的，休息休息。又或者觉得有其他杂事比较忙，等忙完这些再说。但是在另外一方面，我内心又感觉到焦虑，总觉得事情悬在那里不是办法，但每次都没有下决心去解决。<strong>当我完全感受到这种状态时，立马强迫自己行动</strong>，但还是浪费了将近 20 天的时间，原来的计划也被打乱，网站正式发布就又延迟了。</p>
+<p>关于拖延给我们的另一种信号，一个朋友分享了他的一个故事。公司有一关键系统运行正常，就是占用服务器较多，公司交给他来重构。经过三个多月开发，重构代码已经完成，也开始灰度上线了。公司层面觉得应该再过两月就差不多了，两个月过去了，系统还在继续灰度。上司找他谈，希望能快点全量，<strong>这是拖延给他的信号</strong>，他忽略了，认为这么大的系统重构，稍微延后一点也正常；又过去一个月，还在灰度中，上司找他谈，语气就比较重了，这是拖延的第二次信号，他也忽略了，同时还觉得委屈，自己每天忙活这个事情，却得不到理解。朋友后来和我分析了一下当时的心理状态，由于在灰度过程中，重构系统始终达不到较好的状态，出了一些小问题。但考虑到系统很关键，朋友非常担心一旦全量上线，出现问题会兜不住，作为一定程度完美主义的性格，在没达到自己期望效果时迟迟不敢决定，所以不自觉地把项目拖延了。朋友在这家公司的表现成绩最终让自己也不满意，只好辞职走了。</p>
+<p>大部分人也碰到过，在写一个分享 PPT 时，快要到演讲日期了，PPT 还没有写。每次总想找一个大段空闲的时间来完成，等真找到时间了，坐下来开始写，却又无从着手，找不着感觉。这时最想做的是起身去做其他事情，逃离。一旦有这种信号，就变成了拖延中套着拖延，此时也只有<strong>命令自己一定要坐下来，哪怕干坐着，也要坐着，不看手机，不上网，开始写</strong>。</p>
+<p>我们知道拖延的危害，当出现拖延情况时，我们可以通过自己的观察、上司及同事反馈等渠道，收集到各种各样的拖延信号。这时我们最需要做的就是<strong>确认自己处于拖延状况，然后分析拖延的因素，尽快找到解决办法</strong>。</p>
+<p>在互联网公司从业的朋友，很容易看到互联网大佬们各种布局，指点江山来改变整个行业。因此很容易庆幸自己找对行业，并暗暗设定目标，30 岁之前要自己当老板。但很快 30 岁就到了，发现还是没有当成老板。目标有了，但对自己达成目标缺乏自信，也不知道如何入手。</p>
+<p>很多人很多时候知道自己的目标，但是不知道如何从现在的点走到那个目标。这种情况<strong>把目标细分成几个易达成的小目标更合适</strong>。如毕业一年后，能有自己的 APP 或网站；两年后，业务能有一定的收入（比如占自己收入比的 10%），这样一步一步，后续也许真的就成了。有认识做自媒体做得不错的，确实就是从博客时代一直跟进，一周两篇文章，从不间断，慢慢地这件事情就做成了。这就是目标分解的力量。</p>
+<p>工作中，如果项目规划周期过长，如超过半年，就容易出现前面松懈拖延，后面努力追赶进度的情况，不少人的心态是，时间还很多，前松后紧，但一般最后的结果是项目延期。</p>
+<p>目标和回报太遥远，会导致我们拖延。要解决这个问题，是<strong>任务分解，同时每完成其中一个子任务，就奖赏一下自己</strong>。敏捷开发中讲究的持续迭代，就是让开发人员看到每一次迭代的效果，能感受到任务完成的成就感。阶段任务完成后，哪怕是一点点零食的奖赏，都能给我们带来一种满足感。我们的心里也许就是在海洋馆表演的海豹，表现好就是为了得到一条鱼。慢慢地形成一个正反馈后，也就养成了做事不拖延的习惯。</p>
+<p>2007 年买了第一步智能手机，诺基亚的 E50，能安装 App，当时觉得很了不起，终于可以随意看小说了。大概花了一个月的时间在看《大唐双龙传》，再到后面的玄幻小说，感觉那时自己魔怔了，坐公交，吃饭，上班间歇，睡觉前都在看，心里只想继续读下去。回过头去看，当时不分日夜玩手机确实严重影响了正常的工作与生活，造成了正常任务的拖延。</p>
+<p>现在智能机人手一部，有各种主动看的信息，如朋友圈、微博、微信公众号、新闻、电影电视剧及直播等；也有各种被动信息，各个 App 不停地推送各种信息。我们不自觉就手机上瘾了，走路、吃饭、睡觉都要看手机，一些人洗手洗脸的时候，也要单手看手机。</p>
+<p>后果就是，我们无法约束自己，容易冲动和分心，工作一会会，就要翻一下手机。而对大部分人来说，同时只能做一件事情，否则就像进程切换一样，我们从手机及工作之间来回切换，非常浪费时间和精力。为解决自己的手机上瘾问题，我给自己定的规矩是：微信群基本设为接收不提醒；工作时不参加无关群聊；少看或不看小说，电视剧；工作时把手机放远点，屏幕朝桌子下方；上厕所时不要看手机。我建议每个人每天也都设定一个时间段不用手机。</p>
+<p>拖延存在一个怪圈：这次要早点开始-&gt;得马上开始-&gt;不开始又怎样-&gt;干点别的吧-&gt;我有毛病-&gt;最后的抉择(事情做还是不做)-&gt;下次不再拖延-&gt;这次要早点开始-&gt;…，周而复始。当拖延发生时，我们总希望通过逃避，屈从于各种悠闲的活动，最后受伤的总是自己。What doesn’t kill you make you stronger，有一定道理，但是拖延造成的伤痕已经存在，拖延导致的精神赘肉也慢慢变多，我还是那个我，我已经不是那个我了。<br><img src="/images/拖延怪圈.jpg" alt="Alt text"></p>
+<p>2013 年新浪创新大赛，我们组了一个队大概 5 个人，作品是直播地球，就是当前火爆的手机直播，名字有点土，但那时还比较前卫。因为没有经验，我们卡壳在产品设计，Android 开发上，士气低落，大家基本认定这个事情没什么好结果，部门 leader 也会失望。最后也确实令人失望：只写了 PPT，没有产品原型，没有 APP。</p>
+<p>如果我们对任务反感或恐惧，认定有重重困难，结局会很惨，出于人的自我保护本能，自觉不自觉我们都会拖延。这时我们需要的是<strong>了解自己真正反感和恐惧的是什么，然后根据这个找到解决办法</strong>。创新大赛我们团队五个人都是服务端工程师，没有产品设计经验，没有 app 开发经验，较短的时间既要设计出像样的产品，还要开发出 app，这才是我们恐惧的原因。如当时能够调整团队结构，把自己不擅长的事情交由擅长的人来做，事情就能好很多，至少能有一个像样的结果出来。</p>
+<p>自我改变是我每天的旅程。后退一步，前进两步，正视自己拖延的问题，跟拖延说拜拜，迎接更好的自己。</p>
+<p><strong>附录：</strong></p>
+<ul>
+<li>两本拖延的书《拖延心理学》，《战胜拖延症》</li>
+<li>拖延造成身体损害来自《心理学与生活》<br><img src="/images/书1.jpg" alt="Alt text"><br><img src="/images/书2.jpg" alt="Alt text"></li>
+</ul>
 
             <div class="clearfix"></div>
             <hr class="nogutter">
         </div>
         <nav class="pagination" role="pagination">
     
-    <a class="pull-left" href="/2016/04/08/Shell script backup MySQL summary/" style="float: left;">
-        ← Shell脚本备份MySQL总结
-    </a>
     
+    <a class="pull-right" href="/2016/04/08/Shell script backup MySQL summary/">
+        Shell脚本备份MySQL总结 →
+    </a>
     
 </nav>
 
         <div class="duoshuo">
 <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="2016/04/01/PXC/" data-title="PXC（Percona XtraDB Cluster）集群安装，以及关于mysql主从复制的概述与分类" data-url="http://yoursite.com/2016/04/01/PXC/"></div>
+	<div class="ds-thread" data-thread-key="2016/04/15/say goodbye to tuoyan/" data-title="和拖延说拜拜" data-url="http://yoursite.com/2016/04/15/say goodbye to tuoyan/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
