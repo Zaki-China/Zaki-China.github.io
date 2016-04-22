@@ -451,7 +451,7 @@
 <p><strong>从库测试数据：</strong></p>
 <p>（由于能力的问题，不能很好的取到Slave同步所用的时间）</p>
 <p><img src="/images/1461242906692.png" alt="Alt text"></p>
-<h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a><strong>总结：</strong></h4><p>1)测试过程中基本上都会收到<code>Disk I/O is overloaded</code>的报警信息，而且对数据量大的表进行DML和DDL操作时间都会比较长，可见MySQL要是直接裸跑而不采用任何缓存大法机制的话，性能一般都是非常差的。<br>2)知道用<code>mysqlslap</code>和<code>sysbench</code>两种性能测试工具对MySQL进行测试，并且知道两种工具的区别，<code>mysqlslap</code>可以自动清理生成的数据表和工具，还能进行多线程的测试，<code>sysbench</code>功能更加强大，想测试CPU和内存什么的都可以。<br>3)percona-toolkit之<code>pt-online-schema-change</code>（在线更改表结构）<br>优点：<br>能在不锁表的情况下安全快速地更新表结构。<br>缺点：<br>①如果修改的表没有主键，则会报错<br>②该操作会创建临时表，如果存在主从复制，而且设定的主从复制表，那么会导致从库同步失败，原因是没有同步临时表<br>③如果字段为<code>not null</code>，但没给<code>default</code>值，也会报错<br>④该工具不是mysql官方工具，所以操作时建议备份，避免意外</p>
+<h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a><strong>总结：</strong></h4><p><strong>1)</strong>测试过程中基本上都会收到<code>Disk I/O is overloaded</code>的报警信息，而且对数据量大的表进行DML和DDL操作时间都会比较长，可见MySQL要是直接裸跑而不采用任何缓存大法机制的话，性能一般都是非常差的。<br><strong>2)</strong>知道用<code>mysqlslap</code>和<code>sysbench</code>两种性能测试工具对MySQL进行测试，并且知道两种工具的区别，<code>mysqlslap</code>可以自动清理生成的数据表和工具，还能进行多线程的测试，<code>sysbench</code>功能更加强大，想测试CPU和内存什么的都可以。<br><strong>3)</strong>percona-toolkit之<code>pt-online-schema-change</code>（在线更改表结构）<br>优点：<br>能在不锁表的情况下安全快速地更新表结构。<br>缺点：<br>①如果修改的表没有主键，则会报错<br>②该操作会创建临时表，如果存在主从复制，而且设定的主从复制表，那么会导致从库同步失败，原因是没有同步临时表<br>③如果字段为<code>not null</code>，但没给<code>default</code>值，也会报错<br>④该工具不是mysql官方工具，所以操作时建议备份，避免意外</p>
 
             <div class="clearfix"></div>
             <hr class="nogutter">
