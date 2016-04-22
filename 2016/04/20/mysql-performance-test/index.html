@@ -118,13 +118,19 @@
 				  	
 				    <li><a href="/categories/PXC/Mysql/集群/M-S/" class="animsition-link">M/S<small>(1)</small></a></li>
 				    
-				    <li><a href="/categories/PXC/Mysql/" class="animsition-link">Mysql<small>(1)</small></a></li>
+				    <li><a href="/categories/MySQL/" class="animsition-link">MySQL<small>(1)</small></a></li>
 				    
 				    <li><a href="/categories/shell/Mysql/" class="animsition-link">Mysql<small>(1)</small></a></li>
 				    
+				    <li><a href="/categories/PXC/Mysql/" class="animsition-link">Mysql<small>(1)</small></a></li>
+				    
 				    <li><a href="/categories/PXC/" class="animsition-link">PXC<small>(1)</small></a></li>
 				    
+				    <li><a href="/categories/MySQL/mysqlslap/" class="animsition-link">mysqlslap<small>(1)</small></a></li>
+				    
 				    <li><a href="/categories/shell/" class="animsition-link">shell<small>(1)</small></a></li>
+				    
+				    <li><a href="/categories/MySQL/mysqlslap/sysbench/" class="animsition-link">sysbench<small>(1)</small></a></li>
 				    
 				    <li><a href="/categories/shell/Mysql/备份/" class="animsition-link">备份<small>(1)</small></a></li>
 				    
@@ -259,13 +265,10 @@
         </div>
         <div class="col-md-8 col-md-offset-2">
       		<p><strong>操作系统 ：</strong>Centos 6.4 64位<br><strong>软件版本 ：</strong>10.0.24-MariaDB</p>
-<p>本次测试只是<code>Mysql</code>初学者的一次操作练习，并没有按照专业的测试方法来操作，不专业和错误的地方还希望大家看了之后能够指出来，我好及时改正。</p>
-<h4 id="总则："><a href="#总则：" class="headerlink" title="总则："></a>总则：</h4><p>用你想象得到的方法测试MySQL的性能，并且用Zabbix监控观察和记录所用测试方法对性能的影响。</p>
-<h4 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h4><ol>
-<li><strong>MySQL基本性能测试：</strong></li>
-</ol>
-<p>测试内容：<br>    至少用到两个MySQL性能测试工具，记录关键性能指标，此处可以有个表格来记录。</p>
-<p>mysqlslap测试方法：</p>
+<p>本次测试只是<code>MySQL</code>初学者的一次操作练习，并没有按照专业的测试方法来操作，不专业和错误的地方还希望大家看了之后能够指出来，我好及时改正。</p>
+<h4 id="总则："><a href="#总则：" class="headerlink" title="总则："></a>总则：</h4><p>用你想象得到的方法测试<code>MySQL</code>的性能，并且用<code>Zabbix</code>监控观察和记录所用测试方法对性能的影响。</p>
+<h4 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h4><h4 id="1-MySQL基本性能测试："><a href="#1-MySQL基本性能测试：" class="headerlink" title="1. MySQL基本性能测试："></a><strong>1. MySQL基本性能测试：</strong></h4><p>测试内容：<br>    至少用到两个MySQL性能测试工具，记录关键性能指标，此处可以有个表格来记录。</p>
+<p><code>mysqlslap</code>测试方法：</p>
 <pre><code>mysqlslap -a --auto-generate-sql-load-type=mixed --concurrency=50,100 --number-of-queries 500 --iterations=5 --engine=innodb --debug-info -uroot -p
 </code></pre><p>输出结果：</p>
 <pre><code>Benchmark
@@ -290,7 +293,7 @@ Maximum resident set size 9440, Integral resident set size 0
 Non-physical pagefaults 11044, Physical pagefaults 12, Swaps 0
 Blocks in 2536 out 0, Messages in 0 out 0, Signals 0
 Voluntary context switches 16104, Involuntary context switches 99
-</code></pre><p>sysbench测试方法：</p>
+</code></pre><p><code>sysbench</code>测试方法：</p>
 <pre><code>sysbench --test=oltp --mysql-table-engine=innodb --mysql-user=root --db-driver=mysql --mysql-db=test  --oltp-table-size=30000 --oltp-table-name=t1 --oltp-nontrx-mode=insert --mysql-socket=/var/lib/mysql/mysql.sock --mysql-password=xxxxx run
 </code></pre><p>输出结果：</p>
 <pre><code>OLTP test statistics:
@@ -317,12 +320,10 @@ Test execution summary:
 Threads fairness:
     events (avg/stddev):           10000.0000/0.00
     execution time (avg/stddev):   202.2598/0.00
-</code></pre><p>关键性能指标变化情况：<br>| 关键参数意义      |   关键参数值 |   mysqlslap   |   sysbench  |<br>| :——–: | :——–:| :——: | :——–: |<br>| MYSQL 从缓冲池中读取页次数    |   Innodb_buffer_pool_read_requests |  91.1M-92M  | 92.5M-111M |<br>|MYSQL 从物理磁盘读取页次数|Innodb_buffer_pool_reads|x|0-35K|<br>|MYSQL 线程连接|Threads_connected|x|1.0-2.0|<br>|MYSQL 当前激活线程数|Threads_running|x|1.0-2.0|<br>|每秒Query量|QPS|0-110|0-0.9K|<br>|每秒事务量|TPS|x|0-43|</p>
-<ol>
-<li><strong>MySQL业务使用场景测试（M/S环境下测试）：</strong></li>
-</ol>
-<p>测试内容：</p>
-<h4 id="0-插入制造大量的测试数据（记录500W行以上，空间1G以上，至少有一个这样的大表）"><a href="#0-插入制造大量的测试数据（记录500W行以上，空间1G以上，至少有一个这样的大表）" class="headerlink" title="0.插入制造大量的测试数据（记录500W行以上，空间1G以上，至少有一个这样的大表）"></a><strong>0.插入制造大量的测试数据（记录500W行以上，空间1G以上，至少有一个这样的大表）</strong></h4><p>表结构：</p>
+</code></pre><p>关键性能指标变化情况：<br>| 关键参数意义 | 关键参数值 | mysqlslap | sysbench |<br>| :——–: | :——–: | :——: | :——–: |<br>| MYSQL 从缓冲池中读取页次数 | Innodb_buffer_pool_read_requests | 91.1M-92M | 92.5M-111M |<br>|MYSQL 从物理磁盘读取页次数|Innodb_buffer_pool_reads|x|0-35K|<br>|MYSQL 线程连接|Threads_connected|x|1.0-2.0|<br>|MYSQL 当前激活线程数|Threads_running|x|1.0-2.0|<br>|每秒Query量|QPS|0-110|0-0.9K|<br>|每秒事务量|TPS|x|0-43|</p>
+<h4 id="2-MySQL业务使用场景测试（M-S环境下测试）："><a href="#2-MySQL业务使用场景测试（M-S环境下测试）：" class="headerlink" title="2. MySQL业务使用场景测试（M/S环境下测试）："></a><strong>2. MySQL业务使用场景测试（M/S环境下测试）：</strong></h4><p>测试内容：</p>
+<p><strong>0.插入制造大量的测试数据（记录500W行以上，空间1G以上，至少有一个这样的大表）</strong></p>
+<p>表结构：</p>
 <pre><code>create_tablea_sql=&quot;create table IF NOT EXISTS ${TABLENAME}(
 id int(5) primary key,
 name varchar(20),
@@ -408,7 +409,7 @@ DEFAULT CHARSET=utf8&quot;
 <h4 id="18、detele大量数据-用主键"><a href="#18、detele大量数据-用主键" class="headerlink" title="18、detele大量数据(用主键)"></a>18、detele大量数据(用主键)</h4><p><strong>主库：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete from test_table_a where id &lt; 3054793</span><br></pre></td></tr></table></figure>
 <p><strong>从库：</strong><br>无法获取数据</p>
-<h4 id="数据汇总"><a href="#数据汇总" class="headerlink" title="数据汇总"></a>数据汇总</h4><p>（以下数据可能存在很多错误）<br><strong>主库测试数据：</strong><br><img src="/images/1461242852929.png" alt="Alt text"><br><strong>从库测试数据：</strong><br>（由于能力的问题，不能很好的取到Slave同步所用的时间）<br><img src="images/1461242906692.png" alt="Alt text"></p>
+<h4 id="数据汇总"><a href="#数据汇总" class="headerlink" title="数据汇总"></a>数据汇总</h4><p>（以下数据可能存在很多错误）<br><strong>主库测试数据：</strong><br><img src="/images/1461242852929.png" alt="Alt text"><br><strong>从库测试数据：</strong><br>（由于能力的问题，不能很好的取到Slave同步所用的时间）<br><img src="/images/1461242906692.png" alt="Alt text"></p>
 <h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a><strong>总结：</strong></h4><p>1)测试过程中基本上都会收到<code>Disk I/O is overloaded</code>的报警信息，而且对数据量大的表进行DML和DDL操作时间都会比较长，可见MySQL要是直接裸跑而不采用任何缓存大法机制的话，性能一般都是非常差的。<br>2)知道用<code>mysqlslap</code>和<code>sysbench</code>两种性能测试工具对MySQL进行测试，并且知道两种工具的区别，<code>mysqlslap</code>可以自动清理生成的数据表和工具，还能进行多线程的测试，<code>sysbench</code>功能更加强大，想测试CPU和内存什么的都可以。<br>3)percona-toolkit之<code>pt-online-schema-change</code>（在线更改表结构）<br>优点：<br>能在不锁表的情况下安全快速地更新表结构。<br>缺点：<br>①如果修改的表没有主键，则会报错<br>②该操作会创建临时表，如果存在主从复制，而且设定的主从复制表，那么会导致从库同步失败，原因是没有同步临时表<br>③如果字段为<code>not null</code>，但没给<code>default</code>值，也会报错<br>④该工具不是mysql官方工具，所以操作时建议备份，避免意外</p>
 
             <div class="clearfix"></div>
