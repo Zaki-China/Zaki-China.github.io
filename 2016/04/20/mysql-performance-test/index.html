@@ -267,7 +267,8 @@
       		<p><strong>操作系统 ：</strong>Centos 6.4 64位<br><strong>软件版本 ：</strong>10.0.24-MariaDB</p>
 <p>本次测试只是<code>MySQL</code>初学者的一次操作练习，并没有按照专业的测试方法来操作，不专业和错误的地方还希望大家看了之后能够指出来，我好及时改正。</p>
 <h4 id="总则："><a href="#总则：" class="headerlink" title="总则："></a>总则：</h4><p>用你想象得到的方法测试<code>MySQL</code>的性能，并且用<code>Zabbix</code>监控观察和记录所用测试方法对性能的影响。</p>
-<h4 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h4><h4 id="1-MySQL基本性能测试："><a href="#1-MySQL基本性能测试：" class="headerlink" title="1. MySQL基本性能测试："></a><strong>1. MySQL基本性能测试：</strong></h4><p>测试内容：<br>    至少用到两个MySQL性能测试工具，记录关键性能指标，此处可以有个表格来记录。</p>
+<h4 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h4><h4 id="1-MySQL基本性能测试："><a href="#1-MySQL基本性能测试：" class="headerlink" title="1. MySQL基本性能测试："></a><strong>1. MySQL基本性能测试：</strong></h4><p>测试内容：</p>
+<p>至少用到两个MySQL性能测试工具，记录关键性能指标，此处可以有个表格来记录。</p>
 <p><code>mysqlslap</code>测试方法：</p>
 <pre><code>mysqlslap -a --auto-generate-sql-load-type=mixed --concurrency=50,100 --number-of-queries 500 --iterations=5 --engine=innodb --debug-info -uroot -p
 </code></pre><p>输出结果：</p>
@@ -320,7 +321,55 @@ Test execution summary:
 Threads fairness:
     events (avg/stddev):           10000.0000/0.00
     execution time (avg/stddev):   202.2598/0.00
-</code></pre><p>关键性能指标变化情况：<br>| 关键参数意义 | 关键参数值 | mysqlslap | sysbench |<br>| :——–: | :——–: | :——: | :——–: |<br>| MYSQL 从缓冲池中读取页次数 | Innodb_buffer_pool_read_requests | 91.1M-92M | 92.5M-111M |<br>|MYSQL 从物理磁盘读取页次数|Innodb_buffer_pool_reads|x|0-35K|<br>|MYSQL 线程连接|Threads_connected|x|1.0-2.0|<br>|MYSQL 当前激活线程数|Threads_running|x|1.0-2.0|<br>|每秒Query量|QPS|0-110|0-0.9K|<br>|每秒事务量|TPS|x|0-43|</p>
+</code></pre><p>关键性能指标变化情况：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">关键参数意义</th>
+<th>关键参数值</th>
+<th>mysqlslap</th>
+<th style="text-align:center">sysbench</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">MYSQL 从缓冲池中读取页次数</td>
+<td>Innodb_buffer_pool_read_requests</td>
+<td>91.1M-92M</td>
+<td style="text-align:center">92.5M-111M</td>
+</tr>
+<tr>
+<td style="text-align:center">MYSQL 从物理磁盘读取页次数</td>
+<td>Innodb_buffer_pool_reads</td>
+<td>x</td>
+<td style="text-align:center">0-35K</td>
+</tr>
+<tr>
+<td style="text-align:center">MYSQL 线程连接</td>
+<td>Threads_connected</td>
+<td>x</td>
+<td style="text-align:center">1.0-2.0</td>
+</tr>
+<tr>
+<td style="text-align:center">MYSQL 当前激活线程数</td>
+<td>Threads_running</td>
+<td>x</td>
+<td style="text-align:center">1.0-2.0</td>
+</tr>
+<tr>
+<td style="text-align:center">每秒Query量</td>
+<td>QPS</td>
+<td>0-110</td>
+<td style="text-align:center">0-0.9K</td>
+</tr>
+<tr>
+<td style="text-align:center">每秒事务量</td>
+<td>TPS</td>
+<td>x</td>
+<td style="text-align:center">0-43</td>
+</tr>
+</tbody>
+</table>
 <h4 id="2-MySQL业务使用场景测试（M-S环境下测试）："><a href="#2-MySQL业务使用场景测试（M-S环境下测试）：" class="headerlink" title="2. MySQL业务使用场景测试（M/S环境下测试）："></a><strong>2. MySQL业务使用场景测试（M/S环境下测试）：</strong></h4><p>测试内容：</p>
 <p><strong>0.插入制造大量的测试数据（记录500W行以上，空间1G以上，至少有一个这样的大表）</strong></p>
 <p>表结构：</p>
@@ -346,70 +395,126 @@ DEFAULT CHARSET=utf8&quot;
 </code></pre><p>插入数据后大表大小：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+--------------+---------------+---------+------------------+</span><br><span class="line">| TABLE_NAME   | DB_NAME       | ROWS    | PHYSICAL_SIZE_MB |</span><br><span class="line">+--------------+---------------+---------+------------------+</span><br><span class="line">| test_table_b | test_20160421 | 5839363 |    2199.69595432 |</span><br><span class="line">+--------------+---------------+---------+------------------+</span><br></pre></td></tr></table></figure>
 <p>插入数据后小表大小：</p>
-<pre><code>+--------------+---------------+-------+------------------+
-| TABLE_NAME   | DB_NAME       | ROWS  | PHYSICAL_SIZE_MB |
-+--------------+---------------+-------+------------------+
-| test_table_a | test_20160421 | 19575 |       7.50460625 |
-+--------------+---------------+-------+------------------+
-</code></pre><p>插入测试数据过程中各参数变化情况：<br><strong>主库</strong><br>CPU load<br><img src="/images/CPU iowait time.png" alt="Alt text"></p>
-<p>CPU iowait time<br><img src="/images/CPU iowait time.png" alt="Alt text"></p>
-<p>Innodb_buffer_pool_read_requests<br><img src="/images/Innodb_buffer_pool_read_requests.png" alt="Alt text"></p>
-<p>Innodb_buffer_pool_reads<br><img src="/images/Innodb_buffer_pool_reads.png" alt="Alt text"></p>
-<p>QPS<br><img src="/images/QPS.png" alt="Alt text"></p>
-<p>Threads_connected<br><img src="/images/Threads_connected.png" alt="Alt text"></p>
-<p>Threads_running<br><img src="/images/Threads_running.png" alt="Alt text"></p>
-<p><strong>从库</strong><br>CPU load<br><img src="/images/CPU load2.png" alt="Alt text"></p>
-<p>CPU iowait time<br><img src="/images/IOwait.png" alt="Alt text"></p>
-<p>Innodb_buffer_pool_read_requests<br><img src="/images/MYSQL 从缓冲池中读取页次数.png" alt="Alt text"></p>
-<p>QPS<br><img src="/images/QPS2.png" alt="Alt text"></p>
-<p>TPS<br><img src="/images/TPS2.png" alt="Alt text"></p>
-<h4 id="1、添加索引（一句添加一个）"><a href="#1、添加索引（一句添加一个）" class="headerlink" title="1、添加索引（一句添加一个）"></a><strong>1、添加索引（一句添加一个）</strong></h4><p><strong>主库：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE `test_table_b` ADD INDEX(createtime);</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 0 rows affected (5 min 19.05 sec)         </span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure></p>
-<p><strong>从库：</strong><br>iowait：<br><img src="/images/1461219108244.png" alt="Alt text"><br>大概7分钟左右。</p>
-<h4 id="2、添加索引（多句修改多个）"><a href="#2、添加索引（多句修改多个）" class="headerlink" title="2、添加索引（多句修改多个）"></a>2、添加索引（多句修改多个）</h4><p><strong>主库：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE `test_table_b` ADD INDEX(createtime);</span><br><span class="line">ALTER TABLE `test_table_b` ADD INDEX(name);</span><br><span class="line">ALTER TABLE `test_table_b` ADD INDEX(age);</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 0 rows affected (5 min 17.07 sec)         </span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br><span class="line">Query OK, 0 rows affected (5 min 51.08 sec)         </span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br><span class="line">Query OK, 0 rows affected (5 min 39.38 sec)         </span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure></p>
-<p><strong>从库：</strong><br>iowait：<br><img src="/images/1461222070278.png" alt="Alt text"><br>大概19分钟左右。</p>
-<h4 id="3、添加索引（一句修改多个）"><a href="#3、添加索引（一句修改多个）" class="headerlink" title="3、添加索引（一句修改多个）"></a>3、添加索引（一句修改多个）</h4><p><strong>主库：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE `test_table_b` ADD INDEX(createtime),ADD INDEX(name),ADD INDEX(age);</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 0 rows affected (7 min 55.30 sec)         </span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure></p>
-<p><strong>从库：</strong><br>iowait：<br><img src="/images/1461220178411.png" alt="Alt text"></p>
-<h4 id="4、添加索引（OSC变更）"><a href="#4、添加索引（OSC变更）" class="headerlink" title="4、添加索引（OSC变更）"></a>4、添加索引（OSC变更）</h4><p><strong>主库：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+--------------+---------------+-------+------------------+</span><br><span class="line">| TABLE_NAME   | DB_NAME       | ROWS  | PHYSICAL_SIZE_MB |</span><br><span class="line">+--------------+---------------+-------+------------------+</span><br><span class="line">| test_table_a | test_20160421 | 19575 |       7.50460625 |</span><br><span class="line">+--------------+---------------+-------+------------------+</span><br></pre></td></tr></table></figure>
+<p>插入测试数据过程中各参数变化情况：</p>
+<p><strong>主库</strong></p>
+<p><code>CPU load</code><br><img src="/images/CPU iowait time.png" alt="Alt text"></p>
+<p><code>CPU iowait time</code><br><img src="/images/CPU iowait time.png" alt="Alt text"></p>
+<p><code>Innodb_buffer_pool_read_requests</code><br><img src="/images/Innodb_buffer_pool_read_requests.png" alt="Alt text"></p>
+<p><code>Innodb_buffer_pool_reads</code><br><img src="/images/Innodb_buffer_pool_reads.png" alt="Alt text"></p>
+<p><code>QPS</code><br><img src="/images/QPS.png" alt="Alt text"></p>
+<p><code>Threads_connected</code><br><img src="/images/Threads_connected.png" alt="Alt text"></p>
+<p><code>Threads_running</code><br><img src="/images/Threads_running.png" alt="Alt text"></p>
+<p><strong>从库</strong></p>
+<p><code>CPU load</code><br><img src="/images/CPU load2.png" alt="Alt text"></p>
+<p><code>CPU iowait time</code><br><img src="/images/IOwait.png" alt="Alt text"></p>
+<p><code>Innodb_buffer_pool_read_requests</code><br><img src="/images/MYSQL 从缓冲池中读取页次数.png" alt="Alt text"></p>
+<p><code>QPS</code><br><img src="/images/QPS2.png" alt="Alt text"></p>
+<p><code>TPS</code><br><img src="/images/TPS2.png" alt="Alt text"></p>
+<p><strong>1、添加索引（一句添加一个）</strong></p>
+<p><strong>主库：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE `test_table_b` ADD INDEX(createtime);</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 0 rows affected (5 min 19.05 sec)         </span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure>
+<p><strong>从库：</strong></p>
+<p><code>iowait</code></p>
+<p><img src="/images/1461219108244.png" alt="Alt text"></p>
+<p>大概7分钟左右。</p>
+<p><strong>2、添加索引（多句修改多个）</strong></p>
+<p><strong>主库：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE `test_table_b` ADD INDEX(createtime);</span><br><span class="line">ALTER TABLE `test_table_b` ADD INDEX(name);</span><br><span class="line">ALTER TABLE `test_table_b` ADD INDEX(age);</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 0 rows affected (5 min 17.07 sec)         </span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br><span class="line">Query OK, 0 rows affected (5 min 51.08 sec)         </span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br><span class="line">Query OK, 0 rows affected (5 min 39.38 sec)         </span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure>
+<p><strong>从库：</strong></p>
+<p><code>iowait</code></p>
+<p><img src="/images/1461222070278.png" alt="Alt text"></p>
+<p>大概19分钟左右。</p>
+<p><strong>3、添加索引（一句修改多个）</strong></p>
+<p><strong>主库：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE `test_table_b` ADD INDEX(createtime),ADD INDEX(name),ADD INDEX(age);</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 0 rows affected (7 min 55.30 sec)         </span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure>
+<p><strong>从库：</strong></p>
+<p><code>iowait</code></p>
+<p><img src="/images/1461220178411.png" alt="Alt text"></p>
+<p><strong>4、添加索引（OSC变更）</strong></p>
+<p><strong>主库：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pt-online-schema-change --user=root --password=warren --host=127.0.0.1  --alter &quot;ADD INDEX idx_name(name)&quot; D=test_20160421,t=test_table_b --no-check-alter --no-check-replication-filters --recursion-method=none --print --execute</span><br><span class="line"># 测试结果</span><br><span class="line">2016-04-21T15:01:55 Created triggers OK.</span><br><span class="line">2016-04-21T15:01:55 Copying approximately 5839363 rows...</span><br><span class="line">2016-04-21T16:07:28 Copied rows OK.</span><br><span class="line">2016-04-21T16:07:28 Analyzing new table...</span><br><span class="line">2016-04-21T16:07:33 Swapping tables...</span><br><span class="line">RENAME TABLE `test_20160421`.`test_table_b` TO `test_20160421`.`_test_table_b_old`, `test_20160421`.`_test_table_b_new` TO `test_20160421`.`test_table_b`</span><br><span class="line">2016-04-21T16:07:37 Swapped original and new tables OK.</span><br><span class="line">2016-04-21T16:07:37 Dropping old table...</span><br><span class="line">DROP TABLE IF EXISTS `test_20160421`.`_test_table_b_old`</span><br><span class="line">2016-04-21T16:07:40 Dropped old table `test_20160421`.`_test_table_b_old` OK.</span><br><span class="line">2016-04-21T16:07:40 Dropping triggers...</span><br></pre></td></tr></table></figure>
-<p>大约用时：1小时6分钟<br><strong>从库：</strong><br>TPS:<br><img src="/images/1461226653253.png" alt="Alt text"><br>大约用时：1小时6分钟</p>
-<h4 id="5、删除索引（一句添加一个）"><a href="#5、删除索引（一句添加一个）" class="headerlink" title="5、删除索引（一句添加一个）"></a>5、删除索引（一句添加一个）</h4><p><strong>主库：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DROP INDEX createtime ON test_table_b;</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 0 rows affected (0.10 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure></p>
-<p><strong>从库：</strong><br>iowait：</p>
+<p>大约用时：1小时6分钟 </p>
+<p><strong>从库：</strong></p>
+<p><code>TPS</code></p>
+<p><img src="/images/1461226653253.png" alt="Alt text"></p>
+<p>大约用时：1小时6分钟</p>
+<p><strong>5、删除索引（一句添加一个）</strong></p>
+<p><strong>主库：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DROP INDEX createtime ON test_table_b;</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 0 rows affected (0.10 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure>
+<p><strong>从库：</strong></p>
+<p><code>iowait</code></p>
 <p>大约0.1秒</p>
-<h4 id="6、删除索引（多句修改多个）"><a href="#6、删除索引（多句修改多个）" class="headerlink" title="6、删除索引（多句修改多个）"></a>6、删除索引（多句修改多个）</h4><p><strong>主库：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE `test_table_b` DROP INDEX createtime;</span><br><span class="line">ALTER TABLE `test_table_b` DROP INDEX name;</span><br><span class="line">ALTER TABLE `test_table_b` DROP INDEX age;</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 0 rows affected (0.69 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br><span class="line">Query OK, 0 rows affected (3.00 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br><span class="line">Query OK, 0 rows affected (0.12 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure></p>
-<p><strong>从库：</strong><br>大约3.81秒</p>
-<h4 id="7、删除索引（一句修改多个）"><a href="#7、删除索引（一句修改多个）" class="headerlink" title="7、删除索引（一句修改多个）"></a>7、删除索引（一句修改多个）</h4><p><strong>主库：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE `test_table_b` DROP INDEX createtime,DROP INDEX name,DROP INDEX age;</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 0 rows affected (0.31 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure></p>
-<p><strong>从库：</strong><br>大约0.31秒</p>
-<h4 id="8、删除索引（OSC变更）"><a href="#8、删除索引（OSC变更）" class="headerlink" title="8、删除索引（OSC变更）"></a>8、删除索引（OSC变更）</h4><p><strong>主库：</strong></p>
+<p><strong>6、删除索引（多句修改多个）</strong></p>
+<p><strong>主库：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE `test_table_b` DROP INDEX createtime;</span><br><span class="line">ALTER TABLE `test_table_b` DROP INDEX name;</span><br><span class="line">ALTER TABLE `test_table_b` DROP INDEX age;</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 0 rows affected (0.69 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br><span class="line">Query OK, 0 rows affected (3.00 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br><span class="line">Query OK, 0 rows affected (0.12 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure>
+<p><strong>从库：</strong></p>
+<p>大约3.81秒</p>
+<p><strong>7、删除索引（一句修改多个）</strong></p>
+<p><strong>主库：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE `test_table_b` DROP INDEX createtime,DROP INDEX name,DROP INDEX age;</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 0 rows affected (0.31 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure>
+<p><strong>从库：</strong></p>
+<p>大约0.31秒</p>
+<p><strong>8、删除索引（OSC变更）</strong></p>
+<p><strong>主库：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pt-online-schema-change --user=root --password=warren --host=127.0.0.1 --alter &quot;DROP INDEX idx_name&quot; D=test_20160421,t=test_table_b --no-check-alter --no-check-replication-filters --recursion-method=none --print --execute</span><br><span class="line"># 测试结果</span><br><span class="line">2016-04-21T20:06:15 Creating triggers...</span><br><span class="line">2016-04-21T20:17:42 Dropped triggers OK.</span><br><span class="line">2016-04-21T20:17:42 Dropping new table...</span><br></pre></td></tr></table></figure>
-<p>使用时间：11分钟27秒=687秒<br><strong>从库：</strong><br>无法取得准确数据</p>
-<h4 id="9、update大量数据-用主键"><a href="#9、update大量数据-用主键" class="headerlink" title="9、update大量数据(用主键)"></a>9、update大量数据(用主键)</h4><p><strong>主库：</strong></p>
+<p>使用时间：11分钟27秒=687秒</p>
+<p><strong>从库：</strong></p>
+<p>无法取得准确数据</p>
+<p><strong>9、update大量数据(用主键)</strong></p>
+<p><strong>主库：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 查询数据条数</span><br><span class="line">select count(*) from test_table_b where id&gt;2000 and id&lt;3000000; </span><br><span class="line">+----------+</span><br><span class="line">| count(*) |</span><br><span class="line">+----------+</span><br><span class="line">|  1836202 |</span><br><span class="line">+----------+</span><br><span class="line">1 row in set (26.55 sec)</span><br><span class="line"></span><br><span class="line"># 更新数据</span><br><span class="line">update test_table_b set age=50 where id&gt;2000 and id&lt;3000000; </span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 1836202 rows affected (3 min 45.09 sec)</span><br><span class="line">Rows matched: 1836202  Changed: 1836202  Warnings: 0</span><br></pre></td></tr></table></figure>
-<p><strong>从库：</strong><br>无法取得准确数据</p>
-<h4 id="10、update大量数据-非主键-非索引"><a href="#10、update大量数据-非主键-非索引" class="headerlink" title="10、update大量数据(非主键 非索引)"></a>10、update大量数据(非主键 非索引)</h4><p><strong>主库：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 查询数据条数</span><br><span class="line">select count(*) from test_table_b where createtime&lt;&quot;2016-04-21 10:35:23&quot; and createtime&gt;&quot;2016-04-21 10:20:23&quot;; </span><br><span class="line">+----------+</span><br><span class="line">| count(*) |</span><br><span class="line">+----------+</span><br><span class="line">|  4080752 |</span><br><span class="line">+----------+</span><br><span class="line">1 row in set (4 min 27.36 sec)</span><br><span class="line"></span><br><span class="line"># 更新数据</span><br><span class="line">update test_table_b set age=30 where createtime&lt;&quot;2016-04-21 10:35:23&quot; and createtime&gt;&quot;2016-04-21 10:20:23&quot;; </span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 4080752 rows affected (5 min 38.14 sec)</span><br><span class="line">Rows matched: 4080752  Changed: 4080752  Warnings: 0</span><br></pre></td></tr></table></figure></p>
-<p><strong>从库：</strong><br>iowait:<br><img src="/images/1461227721260.png" alt="Alt text"><br>大约7分钟</p>
-<h4 id="11、update大量数据-非主键-有索引"><a href="#11、update大量数据-非主键-有索引" class="headerlink" title="11、update大量数据(非主键 有索引)"></a>11、update大量数据(非主键 有索引)</h4><p><strong>主库：</strong></p>
+<p><strong>从库：</strong></p>
+<p>无法取得准确数据</p>
+<p><strong>10、update大量数据(非主键 非索引)</strong></p>
+<p><strong>主库：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 查询数据条数</span><br><span class="line">select count(*) from test_table_b where createtime&lt;&quot;2016-04-21 10:35:23&quot; and createtime&gt;&quot;2016-04-21 10:20:23&quot;; </span><br><span class="line">+----------+</span><br><span class="line">| count(*) |</span><br><span class="line">+----------+</span><br><span class="line">|  4080752 |</span><br><span class="line">+----------+</span><br><span class="line">1 row in set (4 min 27.36 sec)</span><br><span class="line"></span><br><span class="line"># 更新数据</span><br><span class="line">update test_table_b set age=30 where createtime&lt;&quot;2016-04-21 10:35:23&quot; and createtime&gt;&quot;2016-04-21 10:20:23&quot;; </span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 4080752 rows affected (5 min 38.14 sec)</span><br><span class="line">Rows matched: 4080752  Changed: 4080752  Warnings: 0</span><br></pre></td></tr></table></figure>
+<p><strong>从库：</strong></p>
+<p><code>iowait</code></p>
+<p><img src="/images/1461227721260.png" alt="Alt text"></p>
+<p>大约7分钟</p>
+<p><strong>11、update大量数据(非主键 有索引)</strong></p>
+<p><strong>主库：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 查询数据条数</span><br><span class="line">select count(*) from test_table_b where name&lt;&quot;用户20000&quot; and createtime&gt;&quot;用户2000&quot;; </span><br><span class="line">+----------+</span><br><span class="line">| count(*) |</span><br><span class="line">+----------+</span><br><span class="line">|  2029612 |</span><br><span class="line">+----------+</span><br><span class="line">1 row in set, 1 warning (1 min 45.53 sec)</span><br><span class="line"></span><br><span class="line"># 更新数据</span><br><span class="line">update test_table_b set age=40 where name&lt;&quot;用户20000&quot; and createtime&gt;&quot;用户2000&quot;;</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 2029612 rows affected, 1 warning (6 min 27.09 sec)</span><br></pre></td></tr></table></figure>
-<p><strong>从库：</strong><br>iowait：<br>无法取得准确数据</p>
-<h4 id="12、连表查询"><a href="#12、连表查询" class="headerlink" title="12、连表查询"></a>12、连表查询</h4><p><strong>主库：</strong></p>
+<p><strong>从库：</strong></p>
+<p><code>iowait</code></p>
+<p>无法取得准确数据</p>
+<p><strong>主库：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * from test_table_b left join test_table_a on test_table_b.id=test_table_a.id where test_table_b.id &lt; 50000;</span><br><span class="line"># 测试结果</span><br><span class="line">37232 rows in set (1.02 sec)</span><br></pre></td></tr></table></figure>
-<h4 id="13、排序查询"><a href="#13、排序查询" class="headerlink" title="13、排序查询"></a>13、排序查询</h4><p><strong>主库：</strong></p>
+<p><strong>12、排序查询</strong></p>
+<p><strong>主库：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from test_table_b where id &lt; 2000000 order by createtime DESC;</span><br><span class="line"># 测试结果</span><br></pre></td></tr></table></figure>
-<h4 id="14、修改表结构（一句修改一个）"><a href="#14、修改表结构（一句修改一个）" class="headerlink" title="14、修改表结构（一句修改一个）"></a>14、修改表结构（一句修改一个）</h4><p><strong>主库：</strong></p>
+<p><strong>13、修改表结构（一句修改一个）</strong></p>
+<p><strong>主库：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">alter table test_table_b modify name varchar(70);</span><br><span class="line"># 测试结果</span><br><span class="line">Query OK, 5980000 rows affected (22 min 51.15 sec)     </span><br><span class="line">Records: 5980000  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure>
-<p><strong>从库：</strong><br>IOwait:<br><img src="/images/1461234760212.png" alt="Alt text"></p>
-<h4 id="15、修改表结构（多句修改多个）"><a href="#15、修改表结构（多句修改多个）" class="headerlink" title="15、修改表结构（多句修改多个）"></a>15、修改表结构（多句修改多个）</h4><p><strong>主库：</strong></p>
+<p><strong>从库：</strong><br><code>IOwait</code></p>
+<p><img src="/images/1461234760212.png" alt="Alt text"></p>
+<p><strong>14、修改表结构（多句修改多个）</strong></p>
+<p><strong>主库：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">alter table test_table_b modify name varchar(30);</span><br><span class="line">alter table test_table_b drop column test;</span><br><span class="line">alter table test_table_b add test2 int(20);</span><br><span class="line"># 测试结果&amp;</span><br><span class="line">Query OK, 6360000 rows affected (39 min 43.42 sec)     </span><br><span class="line">Records: 6360000  Duplicates: 0  Warnings: 0</span><br><span class="line">Query OK, 6360000 rows affected (36 min 36.42 sec)     </span><br><span class="line">Records: 6360000  Duplicates: 0  Warnings: 0</span><br><span class="line">Query OK, 6360000 rows affected (37 min 21.26 sec)     </span><br><span class="line">Records: 6360000  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure>
-<p><strong>从库：</strong><br>无法取得准确数据</p>
-<h4 id="16、修改表结构（一句修改多个）"><a href="#16、修改表结构（一句修改多个）" class="headerlink" title="16、修改表结构（一句修改多个）"></a>16、修改表结构（一句修改多个）</h4><p><strong>主库：</strong></p>
+<p><strong>从库：</strong></p>
+<p>无法取得准确数据</p>
+<p><strong>15、修改表结构（一句修改多个）</strong></p>
+<p><strong>主库：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">alter table test_table_b modify name varchar(50),add test int(20),modify age int(20);</span><br><span class="line"># 测试数据</span><br><span class="line">Query OK, 6020000 rows affected (43 min 27.49 sec)     </span><br><span class="line">Records: 6020000  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure>
-<p><strong>从库：</strong><br><img src="/images/1461239357277.png" alt="Alt text"></p>
-<h4 id="17、修改表结构（OSC变更）"><a href="#17、修改表结构（OSC变更）" class="headerlink" title="17、修改表结构（OSC变更）"></a>17、修改表结构（OSC变更）</h4><p><strong>主库：</strong></p>
+<p><strong>从库：</strong></p>
+<p><img src="/images/1461239357277.png" alt="Alt text"></p>
+<p><strong>16、修改表结构（OSC变更）</strong></p>
+<p><strong>主库：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pt-online-schema-change --user=root --password=warren --host=127.0.0.1  --alter &quot;CHANGE COLUMN age AGE int(30)&quot; D=test_20160421,t=test_table_b --no-check-alter --no-check-replication-filters --recursion-method=none --quiet --execut</span><br><span class="line"></span><br><span class="line"># 测试结果</span><br><span class="line">出现异常报错</span><br></pre></td></tr></table></figure>
-<p><strong>从库：</strong><br>无法获取数据</p>
-<h4 id="18、detele大量数据-用主键"><a href="#18、detele大量数据-用主键" class="headerlink" title="18、detele大量数据(用主键)"></a>18、detele大量数据(用主键)</h4><p><strong>主库：</strong></p>
+<p><strong>从库：</strong></p>
+<p>无法获取数据</p>
+<p><strong>17、detele大量数据(用主键)</strong></p>
+<p><strong>主库：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete from test_table_a where id &lt; 3054793</span><br></pre></td></tr></table></figure>
-<p><strong>从库：</strong><br>无法获取数据</p>
-<h4 id="数据汇总"><a href="#数据汇总" class="headerlink" title="数据汇总"></a>数据汇总</h4><p>（以下数据可能存在很多错误）<br><strong>主库测试数据：</strong><br><img src="/images/1461242852929.png" alt="Alt text"><br><strong>从库测试数据：</strong><br>（由于能力的问题，不能很好的取到Slave同步所用的时间）<br><img src="/images/1461242906692.png" alt="Alt text"></p>
+<p><strong>从库：</strong></p>
+<p>无法获取数据</p>
+<h4 id="数据汇总"><a href="#数据汇总" class="headerlink" title="数据汇总"></a>数据汇总</h4><p>（以下数据可能存在很多错误）</p>
+<p><strong>主库测试数据：</strong></p>
+<p><img src="/images/1461242852929.png" alt="Alt text"></p>
+<p><strong>从库测试数据：</strong></p>
+<p>（由于能力的问题，不能很好的取到Slave同步所用的时间）</p>
+<p><img src="/images/1461242906692.png" alt="Alt text"></p>
 <h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a><strong>总结：</strong></h4><p>1)测试过程中基本上都会收到<code>Disk I/O is overloaded</code>的报警信息，而且对数据量大的表进行DML和DDL操作时间都会比较长，可见MySQL要是直接裸跑而不采用任何缓存大法机制的话，性能一般都是非常差的。<br>2)知道用<code>mysqlslap</code>和<code>sysbench</code>两种性能测试工具对MySQL进行测试，并且知道两种工具的区别，<code>mysqlslap</code>可以自动清理生成的数据表和工具，还能进行多线程的测试，<code>sysbench</code>功能更加强大，想测试CPU和内存什么的都可以。<br>3)percona-toolkit之<code>pt-online-schema-change</code>（在线更改表结构）<br>优点：<br>能在不锁表的情况下安全快速地更新表结构。<br>缺点：<br>①如果修改的表没有主键，则会报错<br>②该操作会创建临时表，如果存在主从复制，而且设定的主从复制表，那么会导致从库同步失败，原因是没有同步临时表<br>③如果字段为<code>not null</code>，但没给<code>default</code>值，也会报错<br>④该工具不是mysql官方工具，所以操作时建议备份，避免意外</p>
 
             <div class="clearfix"></div>
