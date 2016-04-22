@@ -17,23 +17,23 @@
 <!--<![endif]-->
 
 <head>
-  <title>Tag: M/S | WARREN&#39;s blog</title>
+  <title>搭建Mysql Inception | Zaki&#39;s blog</title>
   <!-- Meta data -->
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content="WARREN's blog">
-    <meta name="author" content="胡涛">
+    <meta name="generator" content="Zaki's blog">
+    <meta name="author" content="Zaki">
     <meta name="description" content="" />
     <meta name="keywords" content="" />
 
     <!-- Favicon, (keep icon in root folder) -->
     <link rel="Shortcut Icon" href="/img/favicon.ico" type="image/ico">
 
-    <link rel="alternate" href="/atom.xml" title="WARREN&#39;s blog" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Zaki&#39;s blog" type="application/atom+xml">
     <link rel="stylesheet" href="/css/all.css" media="screen" type="text/css">
 	
-    <link rel="stylesheet" href="/highlightjs/vs.css" type="text/css">
+    <link rel="stylesheet" href="/highlightjs/googlecode.css" type="text/css">
     
     
 
@@ -84,7 +84,7 @@
 </head>
 
 <!--
-<body class="home-template">
+<body class="post-template">
 -->
 <body id="index" class="lightnav animsition">
 
@@ -154,7 +154,7 @@
                     <!-- Info-bar -->
                     <nav>
                         <ul class="nav">
-                            <li><a href="/" class="animsition-link">WARREN's blog</a></li>
+                            <li><a href="/" class="animsition-link">Zaki's blog</a></li>
                             <li class="nolink"><span>Always </span>Creative.</li>
                             
                             <li><a href="https://github.com/" title="Github" target="_blank"><i class="icon-github"></i></a></li>
@@ -193,7 +193,7 @@
         <!-- ============================ Hero Image =========================== -->
 
         <section id="hero" class="scrollme">
-            <div class="container-fluid element-img" style="background: url(/img/bg_img.jpg) no-repeat center center fixed;background-size: cover">
+            <div class="container-fluid element-img" style="background: url(/img/1.jpg) no-repeat center center fixed;background-size: cover">
                 <div class="row">
                     <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 vertical-align cover boost text-center">
                         <div class="center-me animateme" data-when="exit" data-from="0" data-to="0.6" data-opacity="0" data-translatey="100">
@@ -221,37 +221,76 @@
 
         <!-- ============================ END Hero Image =========================== -->
       
-
-
-<section id="services">
+<section id="intro">
     <div class="container">
-        <div class="row">
-            <div class="col-md-10 col-md-offset-1">
-                <div class="row boxes">
-                    
-                    
-                        
-                        
-                        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 wow fadeInUp" data-wow-delay="0.3s">
-                            
-                              <h4 class="title"><a href="/2016/04/01/PXC/">PXC（Percona XtraDB Cluster）集群安装，以及关于mysql主从复制的概述与分类</a></h4>
-                            
-                            <p><time datetime="2016-04-01T10:45:13.000Z"><a href="/2016/04/01/PXC/">2016-04-01</a></time></p>
-                        </div>
-                    
-                </div>
-            </div>    
+        <div class="row col-md-offset-2">
+            <div class="col-md-8">
+    			<span class="post-meta">
+      <time datetime="2016-04-22T10:11:05.000Z" itemprop="datePublished">
+          2016-04-22
+      </time>
+    
+    
+    | 
+    <a href='/tags/Mysql-Inception/'>Mysql Inception</a>
+    
+    
+</span>
+                <h1>搭建Mysql Inception</h1>
+            </div>
         </div>
-    </div>
-</section> 
+        <div class="col-md-8 col-md-offset-2">
+      		<h1 id="搭建Mysql-Inception"><a href="#搭建Mysql-Inception" class="headerlink" title="搭建Mysql Inception"></a>搭建<code>Mysql Inception</code></h1><p>（参考：<a href="http://mysql-inception.github.io/inception-document/chapter1/）" target="_blank" rel="external">http://mysql-inception.github.io/inception-document/chapter1/）</a></p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>　　<code>Inception</code>是集审核、执行、回滚于一体的一个自动化运维系统，它是根据<code>MySQL</code>代码修改过来的，用它可以很明确的，详细的，准确的审核<code>MySQL</code>的<code>SQL</code>语句，它的工作模式和<code>MySQL</code>完全相同，可以直接使用<code>MySQL</code>客户端来连接，但不需要验证权限，它相对应用程序（上层审核流程系统等）而言，是一个服务器，在连接时需要指定服务器地址及<code>Inception</code>服务器的端口即可，而它相对要审核或执行的语句所对应的线上<code>MySQL</code>服务器来说，是一个客户端，它在内部需要实时的连接数据库服务器来获取所需要的信息，或者直接在在线上执行相应的语句及获取<code>binlog</code>等，<code>Inception</code>就是一个中间性质的服务。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><h4 id="依赖安装"><a href="#依赖安装" class="headerlink" title="依赖安装"></a>依赖安装</h4><p><code>bison</code>下载安装：<br><a href="http://ftp.gnu.org/gnu/bison/" target="_blank" rel="external">bison下载地址</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget http://ftp.gnu.org/gnu/bison/bison-2.5.1.tar.gz</span><br><span class="line">tar -zxvf bison-2.5.1.tar.gz</span><br><span class="line">cd bison-2.5.1</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
+<p>安装<code>cmake</code>、<code>ncurses</code>、<code>openssl</code>、<code>g++</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install cmake ncurses-devel libssl-dev g++</span><br></pre></td></tr></table></figure>
+<h4 id="安装Inception"><a href="#安装Inception" class="headerlink" title="安装Inception"></a>安装<code>Inception</code></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/mysql-inception/inception.git</span><br><span class="line">cd inception</span><br><span class="line">./inception_build.sh debug</span><br></pre></td></tr></table></figure>
+<p><strong>Tips:</strong>每次如果出错之后，需要把编译目录删除掉rm -rf debug，重新执行，不然会执行出错。</p>
+<h4 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/in</span><br><span class="line"># 文件内容</span><br><span class="line">[inception]</span><br><span class="line">general_log=1</span><br><span class="line">general_log_file=inception.log</span><br><span class="line">port=6669</span><br><span class="line">socket=/自己目录，请自行修改/inc.socket</span><br><span class="line">character-set-client-handshake=0</span><br><span class="line">character-set-server=utf8</span><br><span class="line">inception_remote_system_password=root</span><br><span class="line">inception_remote_system_user=wzf1</span><br><span class="line">inception_remote_backup_port=3306</span><br><span class="line">inception_remote_backup_host=127.0.0.1</span><br><span class="line">inception_support_charset=utf8mb4</span><br><span class="line">inception_enable_nullable=0</span><br><span class="line">inception_check_primary_key=1</span><br><span class="line">inception_check_column_comment=1</span><br><span class="line">inception_check_table_comment=1</span><br><span class="line">inception_osc_min_table_size=1</span><br><span class="line">inception_osc_bin_dir=/data/temp</span><br><span class="line">inception_osc_chunk_time=0.1</span><br><span class="line">inception_enable_blob_type=1</span><br><span class="line">inception_check_column_default_value=1</span><br></pre></td></tr></table></figure>
+<p><a href="http://mysql-inception.github.io/inception-document/variables/" target="_blank" rel="external">具体参数变量</a></p>
+<h4 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 做一个软连接</span><br><span class="line">ln -s /zxh/software/inception/debug/sql/Inception /usr/bin/Inception</span><br><span class="line"># 启动</span><br><span class="line">Inception --defaults-file=/etc/inc.cnf</span><br></pre></td></tr></table></figure>
+<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>启动如果不报错的话，说明已经启动成功了，实际上很难让它报错，因为非常轻量级</p>
+<p>启动成功之后，可以简单试一下看，通过MySQL客户端 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -h127.0.0.1 -P6669</span><br></pre></td></tr></table></figure>
+<p>登录上去之后，再执行一个命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">inception get variables;</span><br></pre></td></tr></table></figure>
+<p>输出了所有的变量，恭喜你，已经启动成功了，都说了非常简单。</p>
 
-<section id="statement">
-    <div class="container text-center wow fadeInUp" data-wow-delay="0.5s">
-        <div class="row">
-            <p>虽然还没想好写点什么，但是总觉得这里放句话比较和谐。</p>
+            <div class="clearfix"></div>
+            <hr class="nogutter">
         </div>
+        <nav class="pagination" role="pagination">
+    
+    
+    <a class="pull-right" href="/2016/04/08/PXC/">
+        PXC集群搭建 →
+    </a>
+    
+</nav>
+
+        <div class="duoshuo">
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="2016/04/22/Mysql Inception/" data-title="搭建Mysql Inception" data-url="http://yoursite.com/2016/04/22/Mysql Inception/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"ancientmoonhu"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+</div>
     </div>
 </section>
+
+
       
 <!-- ============================ Footer =========================== -->
 
@@ -259,7 +298,7 @@
     <div class="container">
             <div class="copy">
                 <p>
-                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By 胡涛. All Rights Reserved.
+                    &copy; 2014<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Content By Zaki. All Rights Reserved.
                 </p>
                 <p>Theme By <a href="//go.kieran.top" style="color: #767D84">Kieran</a></p>
             </div>
